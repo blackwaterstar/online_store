@@ -89,7 +89,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             Long pcount = iterator1.next();
             Orderinfo orderinfo = new Orderinfo();
             orderinfo.setOrderId(orderId);
-            orderinfo.setPpId(product.getPid());
+            orderinfo.setPpid(product.getPid());
             orderinfo.setPcount(pcount);
             list.add(orderinfo);
         }
@@ -185,7 +185,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             List<OrderProductDTO> opds = new ArrayList<>();
             orderinfos.forEach(orderinfo ->{
                 //通过商品id封装OrderProductDTO
-                OrderProductDTO opd = getOrderProductDTO(orderinfo.getPpId());
+                OrderProductDTO opd = getOrderProductDTO(orderinfo.getPpid());
                 //从orderinfo中获取商品数量存入到opd中
                 opd.setPcount(orderinfo.getPcount());
                 //opd封装完毕
@@ -250,7 +250,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             List<OrderProductDTO> opds = new ArrayList<>();
             orderinfos.forEach(orderinfo ->{
                 //通过商品id封装OrderProductDTO
-                OrderProductDTO opd = getOrderProductDTO(orderinfo.getPpId());
+                OrderProductDTO opd = getOrderProductDTO(orderinfo.getPpid());
                 //从orderinfo中获取商品数量存入到opd中
                 opd.setPcount(orderinfo.getPcount());
                 //opd封装完毕
@@ -306,7 +306,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             List<OrderProductDTO> opds = new ArrayList<>();
             orderinfos.forEach(orderinfo ->{
                 //通过商品id封装OrderProductDTO
-                OrderProductDTO opd = getOrderProductDTO(orderinfo.getPpId());
+                OrderProductDTO opd = getOrderProductDTO(orderinfo.getPpid());
                 //从orderinfo中获取商品数量存入到opd中
                 opd.setPcount(orderinfo.getPcount());
                 //opd封装完毕

@@ -3,6 +3,7 @@ package com.halcyon.online_store.controller;
 
 import com.halcyon.online_store.entity.Product;
 import com.halcyon.online_store.entity.User;
+import com.halcyon.online_store.entity.dto.LoginDto;
 import com.halcyon.online_store.service.UserService;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -27,7 +28,7 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping("login")
-    public boolean login(String userid, String password){
+    public LoginDto login(String userid, String password){
        return userService.login(userid,password);
     }
 
@@ -39,6 +40,16 @@ public class UserController {
     @RequestMapping("checkUser")
     public boolean checkUser (String userId){
         return userService.checkUser(userId);
+    }
+
+    @RequestMapping("deleteUser")
+    public int deleteUser (String userId){
+        return userService.deleteUser(userId);
+    }
+
+    @RequestMapping("deleteListUser")
+    public int deleteListUser (List userIds){
+        return userService.deleteListUser(userIds);
     }
 
     @RequestMapping("modifyInfo")

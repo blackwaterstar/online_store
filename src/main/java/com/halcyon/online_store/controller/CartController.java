@@ -41,6 +41,20 @@ public class CartController {
 
     }
 
+    @RequestMapping("deleteCart")
+    public int deleteCart(Long cartId){
+//       这几获得当前用户的当前购物车信息（所有）
+        return cartService.deleteCart(cartId);
+
+    }
+
+    @RequestMapping("deleteListCart")
+    public int deleteListCart(List cartIds){
+//       这几获得当前用户的当前购物车信息（所有）
+        return cartService.deleteListCart(cartIds);
+
+    }
+
     @RequestMapping("addCart1")
     public void addCart1(Long userId,Long pid,Long pcount){
 //       这几获得当前用户的当前购物车信息（所有）

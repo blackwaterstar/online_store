@@ -24,4 +24,7 @@ public interface ProductInfoService extends IService<ProductInfo> {
     int deleteProductInfo(long ppid);
 
     int updateProductInfo(ProductInfo productInfo);
+
+    List<ProductInfo> selectListProductInfo(long pid);
 }
+

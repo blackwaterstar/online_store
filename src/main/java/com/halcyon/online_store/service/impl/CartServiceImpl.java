@@ -75,4 +75,14 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
 
     }
 
+    @Override
+    public int deleteCart(Long cartId) {
+        return cartMapper.deleteById(cartId);
+    }
+
+    @Override
+    public int deleteListCart(List cartIds) {
+        return cartMapper.deleteBatchIds(cartIds);
+    }
+
 }

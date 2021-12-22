@@ -39,6 +39,8 @@ public class ProductInfoServiceImpl extends ServiceImpl<ProductInfoMapper, Produ
 
     @Override
     public int addProductInfo(ProductInfo productInfo) {
+        int a = 1+productInfoMapper.selectCount(new QueryWrapper<ProductInfo>().eq("pid",productInfo.getPid()));
+        productInfo.setPpid((int) (productInfo.getPid()*100+a));
         return productInfoMapper.insert(productInfo);
     }
 
@@ -52,5 +54,10 @@ public class ProductInfoServiceImpl extends ServiceImpl<ProductInfoMapper, Produ
         UpdateWrapper<ProductInfo> wrapper = new UpdateWrapper<>();
         wrapper.eq("ppid",productInfo.getPpid());
         return productInfoMapper.update(productInfo,wrapper);
+    }
+
+    @Override
+    public List<ProductInfo> selectListProductInfo(long pid) {
+        return productInfoMapper.selectList(new QueryWrapper<ProductInfo>().eq("pid",pid));
     }
 }

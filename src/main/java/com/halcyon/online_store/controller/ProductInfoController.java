@@ -35,6 +35,13 @@ public class ProductInfoController {
 //       这几获得当前用户的当前购物车信息（所有）
         return productInfoService.selectProductInfo(ppid);
     }
+
+    @RequestMapping("selectListProductInfo")
+    public List<ProductInfo> selectListProductInfo(long pid){
+//       这几获得当前用户的当前购物车信息（所有）
+        return productInfoService.selectListProductInfo(pid);
+    }
+
     @RequestMapping("addProductInfo")
     public int addProductInfo(ProductInfo productInfo){
 //       这几获得当前用户的当前购物车信息（所有）

@@ -26,4 +26,7 @@ public interface CartService extends IService<Cart> {
 
     void list1(Long userId, Long pid, Long pcount);
 
+    int deleteCart(Long cartId);
+
+    int deleteListCart(List cartIds);
 }

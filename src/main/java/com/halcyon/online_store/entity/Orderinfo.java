@@ -25,7 +25,7 @@ import lombok.EqualsAndHashCode;
 
     private Long orderId;
 
-    private Long ppId;
+    private Long ppid;
 
     private Long pcount;
 
