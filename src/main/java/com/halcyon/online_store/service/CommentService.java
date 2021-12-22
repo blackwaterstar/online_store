@@ -3,6 +3,8 @@ package com.halcyon.online_store.service;
 import com.halcyon.online_store.entity.Comment;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -18,4 +20,10 @@ public interface CommentService extends IService<Comment> {
     int deleteComment(String commentId);
 
     Comment selectComment(String commentId);
+
+    List<Comment> selectListComment(String orderId);
+
+    int likesComment(String commentId);
+
+    List<Comment> selectCommentById(Long ppid);
 }

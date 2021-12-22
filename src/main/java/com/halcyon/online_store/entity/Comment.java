@@ -29,7 +29,7 @@ import lombok.EqualsAndHashCode;
 
     private String state;
 
-    private String praseCount;
+    private int likes;
 
     private String createtime;
 

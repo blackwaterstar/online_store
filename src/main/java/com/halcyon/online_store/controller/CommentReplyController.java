@@ -40,7 +40,6 @@ public class CommentReplyController {
         return commentReplyService.deleteCommentReplybyList(commentId,userId,replyUserId);
     }
 
-
     @RequestMapping("selectCommentReply")
     public CommentReply updateCommentReply(String commentId){
         return commentReplyService.selectCommentReply(commentId);
@@ -49,6 +48,16 @@ public class CommentReplyController {
     @RequestMapping("listCommentReply")
     public List<CommentReply> listCommentReply(){
         return commentReplyService.listCommentReply();
+    }
+
+    @RequestMapping("selectListReplyComment")
+    public List<CommentReply> selectListReplyComment(String commentId){
+        return commentReplyService.selectListReplyComment(commentId);
+    }
+
+    @RequestMapping("likesCommentReply")
+    public int likesCommentReply(String replyId){
+        return commentReplyService.likesCommentReply(replyId);
     }
 
 }

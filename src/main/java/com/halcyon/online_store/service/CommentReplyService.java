@@ -23,6 +23,10 @@ public interface CommentReplyService extends IService<CommentReply> {
     CommentReply selectCommentReply(String commentId);
 
     List<CommentReply> listCommentReply();
+
+    List<CommentReply> selectListReplyComment(String commentId);
+
+    int likesCommentReply(String replyId);
 }
 
 

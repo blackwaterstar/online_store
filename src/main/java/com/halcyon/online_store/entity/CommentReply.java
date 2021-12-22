@@ -30,7 +30,7 @@ public class CommentReply implements Serializable {
 
     private String content;
 
-    private String parseCount;
+    private int likes;
 
     private String createtime;
 

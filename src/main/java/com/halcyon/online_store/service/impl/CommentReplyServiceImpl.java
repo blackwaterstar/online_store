@@ -1,6 +1,7 @@
 package com.halcyon.online_store.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.halcyon.online_store.entity.Comment;
 import com.halcyon.online_store.entity.CommentReply;
 import com.halcyon.online_store.mapper.CommentReplyMapper;
 import com.halcyon.online_store.service.CommentReplyService;
@@ -49,5 +50,19 @@ public class CommentReplyServiceImpl extends ServiceImpl<CommentReplyMapper, Com
     @Override
     public List<CommentReply> listCommentReply() {
         return commentReplyMapper.selectList(null);
+    }
+
+    @Override
+    public List<CommentReply> selectListReplyComment(String commentId) {
+        return commentReplyMapper.selectList(new QueryWrapper<CommentReply>().eq("comment_id",commentId).orderByAsc(
+                "reply_id"));
+    }
+
+    @Override
+    public int likesCommentReply(String replyId) {
+        CommentReply commentReply = new CommentReply();
+        int a=commentReply.getLikes()+1;
+        commentReply.setLikes(a);
+        return commentReplyMapper.updateById(commentReply);
     }
 }
