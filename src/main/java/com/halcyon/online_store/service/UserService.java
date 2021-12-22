@@ -2,7 +2,7 @@ package com.halcyon.online_store.service;
 
 import com.halcyon.online_store.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.halcyon.online_store.entity.dto.LoginDto;
+import com.halcyon.online_store.entity.dto.LoginDTO;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface UserService extends IService<User> {
 
-    LoginDto login (String userid, String password);
+    LoginDTO login (String userid, String password);
 
     boolean register(User user);
 

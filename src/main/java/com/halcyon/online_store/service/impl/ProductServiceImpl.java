@@ -2,12 +2,16 @@ package com.halcyon.online_store.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.halcyon.online_store.entity.Product;
+import com.halcyon.online_store.entity.ProductInfo;
+import com.halcyon.online_store.entity.dto.AllProductDTO;
+import com.halcyon.online_store.mapper.ProductInfoMapper;
 import com.halcyon.online_store.mapper.ProductMapper;
 import com.halcyon.online_store.service.ProductService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +27,9 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     @Resource
     private ProductMapper productMapper;
+
+    @Resource
+    private ProductInfoMapper productInfoMapper;
 
     @Override
     public boolean addProduct(Product product) {
@@ -65,6 +72,24 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Override
     public List<Product> listProduct() {
         return productMapper.selectList(null);
+    }
+
+    @Override
+    public List<AllProductDTO> allProduct() {
+        List<Product> products = productMapper.selectList(null);
+        List<AllProductDTO> list = new ArrayList<>();
+        products.forEach(product -> {
+            List<ProductInfo> productInfos = productInfoMapper.selectList(new QueryWrapper<ProductInfo>().eq("pid",
+                    product.getPid()));
+            AllProductDTO productDTO = new AllProductDTO();
+            productDTO.setPid(product.getPid());
+            productDTO.setPname(product.getPname());
+            productDTO.setTid(product.getTid());
+            productDTO.setTpId(product.getTpId());
+            productDTO.setProductInfos(productInfos);
+            list.add(productDTO);
+        });
+        return list;
     }
 
 }

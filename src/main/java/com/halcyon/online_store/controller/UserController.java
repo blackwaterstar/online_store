@@ -1,13 +1,11 @@
 package com.halcyon.online_store.controller;
 
 
-import com.halcyon.online_store.entity.Product;
 import com.halcyon.online_store.entity.User;
-import com.halcyon.online_store.entity.dto.LoginDto;
+import com.halcyon.online_store.entity.dto.LoginDTO;
 import com.halcyon.online_store.service.UserService;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -28,7 +26,7 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping("login")
-    public LoginDto login(String userid, String password){
+    public LoginDTO login(String userid, String password){
        return userService.login(userid,password);
     }
 

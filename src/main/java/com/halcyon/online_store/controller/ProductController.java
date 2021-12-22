@@ -2,6 +2,7 @@ package com.halcyon.online_store.controller;
 
 
 import com.halcyon.online_store.entity.Product;
+import com.halcyon.online_store.entity.dto.AllProductDTO;
 import com.halcyon.online_store.service.ProductService;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -62,5 +63,12 @@ public class ProductController {
         return productService.listProduct();
     }
 
+    @RequestMapping("allProduct")
+    public List<AllProductDTO> allProduct(){
+        return productService.allProduct();
+    }
+
+
 }
+
 

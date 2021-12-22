@@ -2,6 +2,7 @@ package com.halcyon.online_store.service;
 
 import com.halcyon.online_store.entity.Product;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.halcyon.online_store.entity.dto.AllProductDTO;
 
 import java.util.List;
 
@@ -30,4 +31,7 @@ public interface ProductService extends IService<Product> {
     Product getProductById(Long ppId);
 
     List<Product> listProduct();
+
+    List<AllProductDTO> allProduct();
 }
+

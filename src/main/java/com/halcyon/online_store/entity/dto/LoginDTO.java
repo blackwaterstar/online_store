@@ -9,7 +9,7 @@ import lombok.Data;
  * @apiNote
  */
 @Data
-public class LoginDto {
+public class LoginDTO {
     private User user;
     private Long userAmount;
     private Long userConsume;

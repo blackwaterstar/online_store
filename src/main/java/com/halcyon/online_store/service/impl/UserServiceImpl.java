@@ -5,8 +5,7 @@ import com.halcyon.online_store.entity.Address;
 import com.halcyon.online_store.entity.Log;
 import com.halcyon.online_store.entity.User;
 import com.halcyon.online_store.entity.Wallet;
-import com.halcyon.online_store.entity.dto.LoginDto;
-import com.halcyon.online_store.mapper.AddressMapper;
+import com.halcyon.online_store.entity.dto.LoginDTO;
 import com.halcyon.online_store.mapper.LogMapper;
 import com.halcyon.online_store.mapper.UserMapper;
 import com.halcyon.online_store.mapper.WalletMapper;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -45,7 +43,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public LoginDto login(String userid, String password) {
+    public LoginDTO login(String userid, String password) {
         User user = userMapper.selectById(userid);
         if (password.equals(user.getPassword())) {
             Log log = new Log();
@@ -53,7 +51,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             log.setController("用户"+userid+"登录进页面");
             logMapper.insert(log);
             Wallet wallet=walletMapper.selectById(userid);
-            LoginDto loginDto = new LoginDto();
+            LoginDTO loginDto = new LoginDTO();
             loginDto.setUser(user);
             loginDto.setUserAmount(wallet.getUserAmount());
             loginDto.setUserConsume(wallet.getUserConsume());
