@@ -19,7 +19,7 @@ public class AllProductDTO {
 
     private Long tid;
 
-    private Long pid;
+    private int pid;
 
     private List<ProductInfo> productInfos;
 }

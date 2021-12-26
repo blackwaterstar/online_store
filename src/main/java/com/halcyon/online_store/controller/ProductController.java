@@ -29,7 +29,7 @@ public class ProductController {
     private ProductService productService;
 
     @RequestMapping("addProduct")
-    public boolean addProduct(Product product){
+    public int addProduct(Product product){
         return productService.addProduct(product);
     }
 

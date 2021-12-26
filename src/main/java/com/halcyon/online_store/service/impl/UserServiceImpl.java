@@ -43,14 +43,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public LoginDTO login(String userid, String password) {
-        User user = userMapper.selectById(userid);
+    public LoginDTO login(Long userid, String password) {
+        User user = userMapper.selectOne(new QueryWrapper<User>().eq("user_id",userid));
         if (password.equals(user.getPassword())) {
             Log log = new Log();
             log.setState(1);
             log.setController("用户"+userid+"登录进页面");
             logMapper.insert(log);
-            Wallet wallet=walletMapper.selectById(userid);
+            Wallet wallet=walletMapper.selectOne(new QueryWrapper<Wallet>().eq("user_id",userid));
             LoginDTO loginDto = new LoginDTO();
             loginDto.setUser(user);
             loginDto.setUserAmount(wallet.getUserAmount());
@@ -65,6 +65,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (userMapper.insert(user) == 1) {
             Wallet wallet = new Wallet();
             wallet.setUserId(user.getUserId());
+            wallet.setUserAmount((long) 0);
+            wallet.setUserConsume((long) 0);
             walletMapper.insert(wallet);
             Log log = new Log();
             log.setState(2);

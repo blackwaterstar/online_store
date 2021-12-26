@@ -1,18 +1,22 @@
 package com.halcyon.online_store.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.halcyon.online_store.entity.Orderinfo;
 import com.halcyon.online_store.entity.Product;
 import com.halcyon.online_store.entity.ProductInfo;
 import com.halcyon.online_store.entity.dto.AllProductDTO;
 import com.halcyon.online_store.mapper.ProductInfoMapper;
 import com.halcyon.online_store.mapper.ProductMapper;
+import com.halcyon.online_store.service.OrderinfoService;
 import com.halcyon.online_store.service.ProductService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -31,9 +35,15 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Resource
     private ProductInfoMapper productInfoMapper;
 
+
     @Override
-    public boolean addProduct(Product product) {
-        return productMapper.insert(product)==1;
+    public int addProduct(Product product) {
+        QueryWrapper<Product> wrapper = new QueryWrapper<>();
+        wrapper.select("max(pid) as maxPid");
+        Map<String,Object> map = this.getMap(wrapper);
+        long maxPid = (long) map.get("maxPid");
+        product.setPid((int) (maxPid+1));
+        return productMapper.insert(product);
     }
 
     @Override

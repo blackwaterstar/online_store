@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface ProductService extends IService<Product> {
 
-    boolean addProduct(Product product);
+    int addProduct(Product product);
 
     boolean deleteProductByid(String pid);
 

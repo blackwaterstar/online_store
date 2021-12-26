@@ -62,11 +62,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public List<Comment> selectCommentById(Long ppid) {
         QueryWrapper<Orderinfo> wrapper = new QueryWrapper<>();
-        wrapper.select("order_id").eq("ppid",ppid);
+        wrapper.select("order_id").eq(" ppid",ppid);
         List<Orderinfo> list = orderinfoMapper.selectList(wrapper);
         List<Long> list1 = new ArrayList<>();
         list.forEach(orderinfo -> list1.add(orderinfo.getOrderId()));
-        return commentMapper.selectBatchIds(list1);
+      //  return commentMapper.selectBatchIds(list1);
+        return  commentMapper.selectList(new QueryWrapper<Comment>().in("order_id",list1));
 
     }
 }

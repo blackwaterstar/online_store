@@ -2,10 +2,7 @@ package com.halcyon.online_store.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.halcyon.online_store.common.util.MyUtil;
-import com.halcyon.online_store.entity.Address;
-import com.halcyon.online_store.entity.Order;
-import com.halcyon.online_store.entity.Orderinfo;
-import com.halcyon.online_store.entity.Product;
+import com.halcyon.online_store.entity.*;
 import com.halcyon.online_store.entity.dto.CreateOrderDTO;
 import com.halcyon.online_store.entity.dto.OrderDTO;
 import com.halcyon.online_store.entity.dto.OrderProductDTO;
@@ -13,18 +10,14 @@ import com.halcyon.online_store.entity.dto.ResultDTO;
 import com.halcyon.online_store.entity.vo.OrderVO;
 import com.halcyon.online_store.mapper.CartMapper;
 import com.halcyon.online_store.mapper.OrderMapper;
-import com.halcyon.online_store.service.AddressService;
-import com.halcyon.online_store.service.OrderService;
+import com.halcyon.online_store.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.halcyon.online_store.service.OrderinfoService;
-import com.halcyon.online_store.service.ProductService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -46,7 +39,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private CartMapper cartMapper;
 
     @Resource
-    private ProductService productService;
+    private ProductInfoService productInfoService;
 
     @Resource
     private OrderinfoService orderInfoService;
@@ -71,7 +64,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         Order order = orderVO.getTOrder();
         List<Long> pcounts = orderVO.getPcounts();
         //从orderVO中获得所有商品的集合
-        List<Product> products = orderVO.getProducts();
+        List<ProductInfo> productInfos = orderVO.getProductInfos();
         //将order存到数据库的订单表里
         orderMapper.insert(order);
         //====================
@@ -80,18 +73,19 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         //需要封装一个List<TOrderinfo>
         //将List<TProduct>==> List<TOrderinfo>
         //1.遍历
-        Iterator<Product> iterator = products.iterator();
+        Iterator<ProductInfo> iterator = productInfos.iterator();
         Iterator<Long> iterator1 = pcounts.iterator();
         List<Orderinfo> list = new ArrayList<Orderinfo>();
         Long orderId = order.getOrderId();
         while(iterator.hasNext()){
-            Product product = iterator.next();
+            ProductInfo productInfo = iterator.next();
             Long pcount = iterator1.next();
             Orderinfo orderinfo = new Orderinfo();
             orderinfo.setOrderId(orderId);
-            orderinfo.setPpid(product.getPid());
+            orderinfo.setPpid(Long.valueOf(productInfo.getPpid()));
             orderinfo.setPcount(pcount);
             list.add(orderinfo);
+
         }
         try {
             orderInfoService.addOrderInfo(list); //方法B  出现了异常
@@ -126,11 +120,11 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             orderVO.setTOrder(order);
             //2.封装OrderVO中的List<Products>
 //        orderVO.setProducts();
-            List<Long> pids = orderDTO.getPids();
+            List<Long> ppids = orderDTO.getPpids();
             List<Long> pcounts = orderDTO.getPcounts();
             //根据商品id集合获得相应的商品集合
-            List<Product> products = productService.select(pids);
-            orderVO.setProducts(products);
+            List<ProductInfo> productInfos = productInfoService.selectListbypids(ppids);
+            orderVO.setProductInfos(productInfos);
             orderVO.setPcounts(pcounts);
             addOrder(orderVO);
             resultDTO.setResult(true);
@@ -206,8 +200,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
      */
     private OrderProductDTO getOrderProductDTO(Long ppid) {
         OrderProductDTO opd = new OrderProductDTO();
-        Product product = productService.getProductById(ppid);
-        opd.setPname(product.getPname());
+        ProductInfo productInfo = productInfoService.selectProductInfo(ppid);
+        opd.setPname(productInfo.getPname());
         return opd;
 
     }

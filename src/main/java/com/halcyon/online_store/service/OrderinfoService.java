@@ -24,5 +24,5 @@ public interface OrderinfoService extends IService<Orderinfo> {
 
     List<Orderinfo> getOrderInfosByOrderId(Long orderId);
 
-
+    int salesProduct(Long ppid);
 }

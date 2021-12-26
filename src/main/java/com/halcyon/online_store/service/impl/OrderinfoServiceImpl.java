@@ -11,7 +11,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -24,7 +26,7 @@ import java.util.List;
 @Service
 public class OrderinfoServiceImpl extends ServiceImpl<OrderinfoMapper, Orderinfo> implements OrderinfoService {
     @Resource
-    OrderinfoMapper orderinfoMapper;
+   private OrderinfoMapper orderinfoMapper;
 
 
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.NESTED)
@@ -46,6 +48,14 @@ public class OrderinfoServiceImpl extends ServiceImpl<OrderinfoMapper, Orderinfo
         return orderinfoMapper.selectList(wrapper);
     }
 
+    @Override
+    public int salesProduct(Long ppid) {
+        QueryWrapper<Orderinfo> wrapper = new QueryWrapper<>();
+        wrapper.select("sum(pcount) as count").eq("ppid",ppid);
+        Map<String,Object> map = this.getMap(wrapper);
+        BigDecimal pconut = (BigDecimal) map.get("count");
+        return pconut.intValue();
+    }
 
 
 }

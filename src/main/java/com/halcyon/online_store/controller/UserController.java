@@ -26,7 +26,7 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping("login")
-    public LoginDTO login(String userid, String password){
+    public LoginDTO login(Long userid, String password){
        return userService.login(userid,password);
     }
 

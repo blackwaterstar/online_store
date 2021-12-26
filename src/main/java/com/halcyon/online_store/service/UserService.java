@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface UserService extends IService<User> {
 
-    LoginDTO login (String userid, String password);
+    LoginDTO login (Long userid, String password);
 
     boolean register(User user);
 

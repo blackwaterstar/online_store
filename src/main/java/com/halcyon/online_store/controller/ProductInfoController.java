@@ -1,7 +1,9 @@
 package com.halcyon.online_store.controller;
 
 
+import com.halcyon.online_store.entity.Orderinfo;
 import com.halcyon.online_store.entity.ProductInfo;
+import com.halcyon.online_store.service.OrderinfoService;
 import com.halcyon.online_store.service.ProductInfoService;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -23,6 +25,9 @@ import java.util.List;
 public class ProductInfoController {
     @Resource
     private ProductInfoService productInfoService;
+
+    @Resource
+    private OrderinfoService orderinfoService;
 
     @RequestMapping("listProductInfo")
     public List<ProductInfo> listProductInfo(){
@@ -56,6 +61,12 @@ public class ProductInfoController {
     public int updateProductInfo(ProductInfo productInfo){
 //       这几获得当前用户的当前购物车信息（所有）
         return productInfoService.updateProductInfo(productInfo);
+    }
+
+    @RequestMapping("salesProduct")
+    public int salesProduct(Long ppid){
+
+        return orderinfoService.salesProduct(ppid);
     }
 
 }

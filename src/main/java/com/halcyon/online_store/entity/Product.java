@@ -27,7 +27,7 @@ import lombok.EqualsAndHashCode;
 
     private Long tid;
 
-    private Long pid;
+    private int pid;
 
 
 }

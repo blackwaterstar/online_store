@@ -2,14 +2,18 @@ package com.halcyon.online_store.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.halcyon.online_store.entity.Orderinfo;
 import com.halcyon.online_store.entity.ProductInfo;
+import com.halcyon.online_store.mapper.OrderinfoMapper;
 import com.halcyon.online_store.mapper.ProductInfoMapper;
 import com.halcyon.online_store.service.ProductInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -24,6 +28,7 @@ public class ProductInfoServiceImpl extends ServiceImpl<ProductInfoMapper, Produ
 
     @Resource
     private ProductInfoMapper productInfoMapper;
+
 
     @Override
     public List<ProductInfo> listProductInfo() {
@@ -60,4 +65,10 @@ public class ProductInfoServiceImpl extends ServiceImpl<ProductInfoMapper, Produ
     public List<ProductInfo> selectListProductInfo(long pid) {
         return productInfoMapper.selectList(new QueryWrapper<ProductInfo>().eq("pid",pid));
     }
+
+    @Override
+    public List<ProductInfo> selectListbypids(List<Long> ppids) {
+        return productInfoMapper.selectList(new QueryWrapper<ProductInfo>().in("ppid",ppids));
+    }
+
 }
