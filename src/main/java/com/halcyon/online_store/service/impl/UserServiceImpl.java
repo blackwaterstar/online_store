@@ -6,6 +6,7 @@ import com.halcyon.online_store.entity.Log;
 import com.halcyon.online_store.entity.User;
 import com.halcyon.online_store.entity.Wallet;
 import com.halcyon.online_store.entity.dto.LoginDTO;
+import com.halcyon.online_store.entity.vo.LoginVo;
 import com.halcyon.online_store.mapper.LogMapper;
 import com.halcyon.online_store.mapper.UserMapper;
 import com.halcyon.online_store.mapper.WalletMapper;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.xml.stream.events.DTD;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -112,5 +115,44 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public int deleteListUser(List userIds) {
         return userMapper.deleteBatchIds(userIds);
+    }
+
+    @Override
+    public  List<LoginDTO> listUserDto() {
+        List<LoginVo> lists=userMapper.listUserDto();
+        List<LoginDTO> dtos = new ArrayList<>();
+        lists.forEach(list->{
+            LoginDTO dto = new LoginDTO();
+            User user = new User();
+            user.setAddress(list.getAddress());
+            user.setCreatetime(list.getCreatetime());
+            user.setDetailAddress(list.getDetailAddress());
+            user.setEmail(list.getEmail());
+            user.setId(list.getId());
+            user.setPassword(list.getPassword());
+            user.setUpdatime(user.getUpdatime());
+            user.setUserId(list.getUserId());
+            user.setTelephone(list.getTelephone());
+            user.setUsername(list.getUsername());
+            dto.setUser(user);
+            dto.setUserAmount(list.getUserAmount());
+            dto.setUserConsume(list.getUserConsume());
+            dtos.add(dto);
+        });
+
+        return dtos;
+    }
+
+    @Override
+    public LoginDTO searchUserDto(Long userid) {
+        User user = new User();
+        user=userMapper.selectOne(new QueryWrapper<User>().eq("user_id",userid));
+        Wallet wallet=new Wallet();
+        wallet=walletMapper.selectOne(new QueryWrapper<Wallet>().eq("user_id",userid));
+        LoginDTO loginDto = new LoginDTO();
+        loginDto.setUser(user);
+        loginDto.setUserAmount(wallet.getUserAmount());
+        loginDto.setUserConsume(wallet.getUserConsume());
+        return loginDto;
     }
 }

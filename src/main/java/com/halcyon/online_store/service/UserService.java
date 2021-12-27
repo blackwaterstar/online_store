@@ -31,5 +31,9 @@ public interface UserService extends IService<User> {
     int deleteUser(String userId);
 
     int deleteListUser(List userIds);
+
+    List<LoginDTO> listUserDto();
+
+    LoginDTO searchUserDto(Long userid);
 }
 

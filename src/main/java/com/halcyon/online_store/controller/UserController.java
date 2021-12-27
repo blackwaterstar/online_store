@@ -30,6 +30,16 @@ public class UserController {
        return userService.login(userid,password);
     }
 
+    @RequestMapping("listUserDto")
+    public List<LoginDTO> listUserDto(){
+        return userService.listUserDto();
+    }
+
+    @RequestMapping("searchUserDto")
+    public LoginDTO searchUserDto(Long userid){
+        return userService.searchUserDto(userid);
+    }
+
     @RequestMapping("register")
     public boolean register (User user){
         return userService.register(user);

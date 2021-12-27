@@ -13,7 +13,7 @@ public class CartVO {
 
     private Long cartId;
     private Long userId;
-    private Long pid;
+    private Long ppid;
     private String pname;
     private BigDecimal price;
     private Long pcount;
