@@ -19,7 +19,7 @@ public class OrderProductDTO {
      */
 
      private String pname;
-     private BigDecimal price;
+     private Long price;
      private Long pcount;
 
 }

@@ -1,7 +1,5 @@
 package com.halcyon.online_store.entity.vo;
 
-import com.halcyon.online_store.entity.Order;
-import com.halcyon.online_store.entity.Product;
 import com.halcyon.online_store.entity.ProductInfo;
 import lombok.Data;
 
@@ -13,7 +11,7 @@ import java.util.List;
 @Data
 public class OrderVO {
 
-    private Order tOrder;
+    private com.halcyon.online_store.entity.tOrder tOrder;
 
     //当前订单所有商品的集合
     private List<ProductInfo> productInfos;

@@ -1,7 +1,6 @@
 package com.halcyon.online_store.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.halcyon.online_store.entity.Order;
 import com.halcyon.online_store.entity.Orderinfo;
 import com.halcyon.online_store.mapper.OrderinfoMapper;
 import com.halcyon.online_store.service.OrderinfoService;

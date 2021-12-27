@@ -3,10 +3,14 @@ package com.halcyon.online_store.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.halcyon.online_store.common.util.MyUtil;
 import com.halcyon.online_store.entity.Cart;
+import com.halcyon.online_store.entity.Log;
+import com.halcyon.online_store.entity.ProductInfo;
 import com.halcyon.online_store.entity.vo.CartVO;
 import com.halcyon.online_store.mapper.CartMapper;
+import com.halcyon.online_store.mapper.LogMapper;
 import com.halcyon.online_store.service.CartService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.halcyon.online_store.service.ProductInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +30,12 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
 
     @Resource
     private CartMapper cartMapper;
+
+    @Resource
+    private LogMapper logMapper;
+
+    @Resource
+    private ProductInfoService productInfoService;
 
     public List<Cart> getAllCarts(Long userId) {
         QueryWrapper<Cart> wrapper = new QueryWrapper<>();
@@ -71,6 +81,12 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
             cart.setPpid(ppid);
             //存到数据库里
             cartMapper.insert(cart);
+            ProductInfo productInfo = productInfoService.selectProductInfo(ppid);
+            Log log = new Log();
+            log.setUserId(userId);
+            log.setState(4);
+            log.setController("用户"+userId+"把"+productInfo.getPname()+"加入购物车");
+            logMapper.insert(log);
         }
 
     }

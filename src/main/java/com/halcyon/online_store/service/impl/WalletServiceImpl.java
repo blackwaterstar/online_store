@@ -1,6 +1,7 @@
 package com.halcyon.online_store.service.impl;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.halcyon.online_store.entity.Wallet;
 import com.halcyon.online_store.mapper.WalletMapper;
 import com.halcyon.online_store.service.WalletService;
@@ -28,7 +29,7 @@ public class WalletServiceImpl extends ServiceImpl<WalletMapper, Wallet> impleme
 
     @Override
     public Wallet selectWallet(Long userId) {
-        return walletMapper.selectById(userId);
+        return walletMapper.selectOne(new QueryWrapper<Wallet>().eq("user_id",userId));
     }
 
     @Override
@@ -38,7 +39,7 @@ public class WalletServiceImpl extends ServiceImpl<WalletMapper, Wallet> impleme
 
     @Override
     public int topUp(Long userId,int money){
-        Wallet wallet=walletMapper.selectById(userId);
+        Wallet wallet=selectWallet(userId);
         wallet.setUserAmount(wallet.getUserAmount()+money);
         return walletMapper.updateById(wallet);
     }
@@ -46,7 +47,7 @@ public class WalletServiceImpl extends ServiceImpl<WalletMapper, Wallet> impleme
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int cost(Long userId, int money) {
-        Wallet wallet=walletMapper.selectById(userId);
+        Wallet wallet=selectWallet(userId);
         if(wallet.getUserAmount()>=money){
             wallet.setUserAmount(wallet.getUserAmount()-money);
             wallet.setUserConsume(wallet.getUserConsume()+money);

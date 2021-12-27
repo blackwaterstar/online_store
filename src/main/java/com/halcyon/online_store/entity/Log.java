@@ -22,7 +22,7 @@ public class Log implements Serializable {
 
     private Integer logId;
 
-    private Integer userId;
+    private Long userId;
 
     private LocalDateTime time;
 

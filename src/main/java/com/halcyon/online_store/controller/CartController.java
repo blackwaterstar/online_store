@@ -34,9 +34,9 @@ public class CartController {
     }
 
 
-    @RequestMapping("addCart")
-    public List<CartVO> addCart(Long userId){
-//       这几获得当前用户的当前购物车信息（所有）
+    @RequestMapping("getUserCart")
+    public List<CartVO> getUserCart(Long userId){
+//       获得当前用户的当前购物车信息（所有）
         return cartService.list(userId);
 
     }
@@ -55,8 +55,8 @@ public class CartController {
 
     }
 
-    @RequestMapping("addCart1")
-    public void addCart1(Long userId,Long pid,Long pcount){
+    @RequestMapping("addCart")
+    public void addCart(Long userId,Long pid,Long pcount){
 //       这几获得当前用户的当前购物车信息（所有）
         cartService.list1(userId,pid,pcount);
 

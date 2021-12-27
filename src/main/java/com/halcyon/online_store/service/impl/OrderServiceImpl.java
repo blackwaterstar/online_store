@@ -30,7 +30,7 @@ import java.util.List;
  * @since 2021-12-09
  */
 @Service
-public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements OrderService {
+public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implements OrderService {
 
     @Resource
     private OrderMapper orderMapper;
@@ -61,12 +61,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Transactional(rollbackFor = Exception.class)  //方法A
     public void addOrder(OrderVO orderVO) {
         //从orderVO中获得order对象
-        Order order = orderVO.getTOrder();
+        tOrder tOrder = orderVO.getTOrder();
         List<Long> pcounts = orderVO.getPcounts();
         //从orderVO中获得所有商品的集合
         List<ProductInfo> productInfos = orderVO.getProductInfos();
         //将order存到数据库的订单表里
-        orderMapper.insert(order);
+        orderMapper.insert(tOrder);
         //====================
 
         //将数据存入到订单详情表中
@@ -76,7 +76,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         Iterator<ProductInfo> iterator = productInfos.iterator();
         Iterator<Long> iterator1 = pcounts.iterator();
         List<Orderinfo> list = new ArrayList<Orderinfo>();
-        Long orderId = order.getOrderId();
+        Long orderId = tOrder.getOrderId();
         while(iterator.hasNext()){
             ProductInfo productInfo = iterator.next();
             Long pcount = iterator1.next();
@@ -89,7 +89,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         }
         try {
             orderInfoService.addOrderInfo(list); //方法B  出现了异常
-            cartMapper.deleteById(order.getUserId());
+            cartMapper.deleteById(tOrder.getUserId());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -107,17 +107,17 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
             //1.封装OrderVO中的TOrder
             OrderVO orderVO = new OrderVO();
 
-            Order order = new Order();
+            tOrder tOrder = new tOrder();
 
-            order.setOrderId(MyUtil.getCurrentTimeForId());
-            order.setUserId(orderDTO.getUserId());
-            order.setOrderUser(orderDTO.getOrderUser());
-            order.setOrderTel(orderDTO.getOrderTel());
-            order.setOrderAddr(orderDTO.getOrderAddr());
-            order.setOrderPrice(orderDTO.getOrderPrice());
-            order.setPaystatue("未付款");
+            tOrder.setOrderId(MyUtil.getCurrentTimeForId());
+            tOrder.setUserId(orderDTO.getUserId());
+            tOrder.setOrderUser(orderDTO.getOrderUser());
+            tOrder.setOrderTel(orderDTO.getOrderTel());
+            tOrder.setOrderAddr(orderDTO.getOrderAddr());
+            tOrder.setOrderPrice(orderDTO.getOrderPrice());
+            tOrder.setPaystatue("未付款");
             //orderVO.settOrder(tOrder);
-            orderVO.setTOrder(order);
+            orderVO.setTOrder(tOrder);
             //2.封装OrderVO中的List<Products>
 //        orderVO.setProducts();
             List<Long> ppids = orderDTO.getPpids();
@@ -142,24 +142,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
      *
      */
     public List<CreateOrderDTO> getList(Long userId) {
-        /*
-    订单的创建时间
-    订单编号
-    订单总金额
-
-    商品集合：
-        商品名称
-        商品价格
-        商品数量
-     */
-        QueryWrapper<Order> wrapper = new QueryWrapper<>();
-        wrapper.eq("user_id",userId);
-        List<Order> orders = orderMapper.selectList(wrapper);
-
-
+        QueryWrapper<tOrder> wrapper = new QueryWrapper<>();
+        wrapper.eq(" user_id",userId);
+        List<tOrder> tOrders = orderMapper.selectList(wrapper);
         List<CreateOrderDTO> cods = new ArrayList<CreateOrderDTO>();
 
-        orders.forEach( order -> {
+        tOrders.forEach(order -> {
             CreateOrderDTO cod = new CreateOrderDTO();
             cod.setOrderId(order.getOrderId());
             BigDecimal bd = new BigDecimal(order.getOrderPrice().longValue());
@@ -202,63 +190,64 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         OrderProductDTO opd = new OrderProductDTO();
         ProductInfo productInfo = productInfoService.selectProductInfo(ppid);
         opd.setPname(productInfo.getPname());
+        opd.setPrice(productInfo.getPrice());
         return opd;
 
     }
 
-    public List<CreateOrderDTO> getList1(Long userId) {
-        /*
-    订单的创建时间
-    订单编号
-    订单总金额
-
-    商品集合：
-        商品名称
-        商品价格
-        商品数量
-     */
-        QueryWrapper<Order> wrapper = new QueryWrapper<>();
-        wrapper.eq("user_id",userId);
-        List<Order> orders = orderMapper.selectList(wrapper);
-
-
-        List<CreateOrderDTO> cods = new ArrayList<CreateOrderDTO>();
-
-        orders.forEach( order -> {
-            CreateOrderDTO cod = new CreateOrderDTO();
-            cod.setOrderId(order.getOrderId());
-            BigDecimal bd = new BigDecimal(order.getOrderPrice().longValue());
-            cod.setOrderPrice(bd);
-            //将cod存入到cods集合中
-            cods.add(cod);
-        });
-
-        //遍历cods
-        //根据订单编号，去订单详情表中获取该订单的所欲商品的id及商品数量
-        //还要根据商品的id取商品表里获取商品名称和商品价格
-
-        cods.forEach( cod->{
-            //根据订单编号，去订单详情表中获取该订单的所有商品的id及商品数量
-            List<Orderinfo> orderinfos =  orderInfoService.getOrderInfosByOrderId(cod.getOrderId());
-            //封装OrderProductDTO
-            List<OrderProductDTO> opds = new ArrayList<>();
-            orderinfos.forEach(orderinfo ->{
-                //通过商品id封装OrderProductDTO
-                OrderProductDTO opd = getOrderProductDTO(orderinfo.getPpid());
-                //从orderinfo中获取商品数量存入到opd中
-                opd.setPcount(orderinfo.getPcount());
-                //opd封装完毕
-                //存入到集合中
-                opds.add(opd);
-            });
-
-            //将商品集合存入到CreateOrderDTO对象中
-            cod.setProducts(opds);
-//            getOrderProductDTO()
-
-        });
-        return cods;
-    }
+//    public List<CreateOrderDTO> getList1(Long userId) {
+//        /*
+//    订单的创建时间
+//    订单编号
+//    订单总金额
+//
+//    商品集合：
+//        商品名称
+//        商品价格
+//        商品数量
+//     */
+//        QueryWrapper<tOrder> wrapper = new QueryWrapper<>();
+//        wrapper.eq("user_id",userId);
+//        List<tOrder> orders = orderMapper.selectList(wrapper);
+//
+//
+//        List<CreateOrderDTO> cods = new ArrayList<CreateOrderDTO>();
+//
+//        orders.forEach( order -> {
+//            CreateOrderDTO cod = new CreateOrderDTO();
+//            cod.setOrderId(order.getOrderId());
+//            BigDecimal bd = new BigDecimal(order.getOrderPrice().longValue());
+//            cod.setOrderPrice(bd);
+//            //将cod存入到cods集合中
+//            cods.add(cod);
+//        });
+//
+//        //遍历cods
+//        //根据订单编号，去订单详情表中获取该订单的所欲商品的id及商品数量
+//        //还要根据商品的id取商品表里获取商品名称和商品价格
+//
+//        cods.forEach( cod->{
+//            //根据订单编号，去订单详情表中获取该订单的所有商品的id及商品数量
+//            List<Orderinfo> orderinfos =  orderInfoService.getOrderInfosByOrderId(cod.getOrderId());
+//            //封装OrderProductDTO
+//            List<OrderProductDTO> opds = new ArrayList<>();
+//            orderinfos.forEach(orderinfo ->{
+//                //通过商品id封装OrderProductDTO
+//                OrderProductDTO opd = getOrderProductDTO(orderinfo.getPpid());
+//                //从orderinfo中获取商品数量存入到opd中
+//                opd.setPcount(orderinfo.getPcount());
+//                //opd封装完毕
+//                //存入到集合中
+//                opds.add(opd);
+//            });
+//
+//            //将商品集合存入到CreateOrderDTO对象中
+//            cod.setProducts(opds);
+////            getOrderProductDTO()
+//
+//        });
+//        return cods;
+//    }
 
     @Override
     public List<CreateOrderDTO> getList2(Long orderId, Long userId) {
@@ -272,15 +261,15 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         商品价格
         商品数量
      */
-        QueryWrapper<Order> wrapper = new QueryWrapper<>();
+        QueryWrapper<tOrder> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id",userId);
         wrapper.like("order_id",orderId);
-        List<Order> orders = orderMapper.selectList(wrapper);
+        List<tOrder> tOrders = orderMapper.selectList(wrapper);
 
 
         List<CreateOrderDTO> cods = new ArrayList<CreateOrderDTO>();
 
-        orders.forEach( order -> {
+        tOrders.forEach(order -> {
             CreateOrderDTO cod = new CreateOrderDTO();
             cod.setOrderId(order.getOrderId());
             BigDecimal bd = new BigDecimal(order.getOrderPrice().longValue());
@@ -317,16 +306,16 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @Override
-    public Order getorder(Long orderId){
+    public tOrder getorder(Long orderId){
         return  orderMapper.selectById(orderId);
     }
 
     @Override
     public Integer updatestatme(Long orderId) {
-        Order order = new Order();
-        order.setOrderId(orderId);
-        order.setPaystatue("已付款");
-        return orderMapper.updateById(order);
+        tOrder tOrder = new tOrder();
+        tOrder.setOrderId(orderId);
+        tOrder.setPaystatue("已付款");
+        return orderMapper.updateById(tOrder);
     }
 
 }

@@ -50,6 +50,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = userMapper.selectOne(new QueryWrapper<User>().eq("user_id",userid));
         if (password.equals(user.getPassword())) {
             Log log = new Log();
+            log.setUserId(userid);
             log.setState(1);
             log.setController("用户"+userid+"登录进页面");
             logMapper.insert(log);
@@ -72,6 +73,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             wallet.setUserConsume((long) 0);
             walletMapper.insert(wallet);
             Log log = new Log();
+            log.setUserId(user.getUserId());
             log.setState(2);
             log.setController("用户"+user.getUserId()+"注册成功");
             logMapper.insert(log);

@@ -3,11 +3,14 @@ package com.halcyon.online_store.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.halcyon.online_store.common.util.MyUtil;
 import com.halcyon.online_store.entity.Collect;
+import com.halcyon.online_store.entity.Log;
 import com.halcyon.online_store.entity.ProductInfo;
 import com.halcyon.online_store.mapper.CollectMapper;
+import com.halcyon.online_store.mapper.LogMapper;
 import com.halcyon.online_store.mapper.ProductInfoMapper;
 import com.halcyon.online_store.service.CollectService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.halcyon.online_store.service.LogService;
 import com.halcyon.online_store.service.ProductInfoService;
 import org.springframework.stereotype.Service;
 
@@ -31,12 +34,15 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> impl
     @Resource
     private ProductInfoService productInfoService;
 
+    @Resource
+    private LogMapper logMapper;
+
     @Override
     public int addCollect(Long userId, Long ppid) {
         QueryWrapper<Collect> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id", userId);
         wrapper.eq("ppid", ppid);
-        if (collectMapper.selectCount(wrapper) == 0) {
+        if (collectMapper.selectCount(wrapper) > 0) {
             return 0;
         } else {
             ProductInfo productInfo = productInfoService.selectProductInfo(ppid);
@@ -45,6 +51,11 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> impl
             collect.setUserId(userId);
             collect.setUserId(ppid);
             collect.setCollectId(MyUtil.getCurrentTimeForId());
+            Log log = new Log();
+            log.setUserId(userId);
+            log.setState(3);
+            log.setController("用户"+userId+"收藏了"+productInfo.getPname());
+            logMapper.insert(log);
             return collectMapper.insert(collect);
         }
     }

@@ -1,5 +1,7 @@
 package com.halcyon.online_store.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.halcyon.online_store.entity.Product;
 import com.halcyon.online_store.entity.Type;
 import com.halcyon.online_store.mapper.TypeMapper;
 import com.halcyon.online_store.service.TypeService;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -25,6 +28,11 @@ public class TypeServiceImpl extends ServiceImpl<TypeMapper, Type> implements Ty
 
     @Override
     public int addType(Type type) {
+        QueryWrapper<Type> wrapper = new QueryWrapper<>();
+        wrapper.select("max(id) as maxid");
+        Map<String,Object> map = this.getMap(wrapper);
+        long maxPid = (long) map.get("maxid");
+        type.setId(maxPid+1);
         return typeMapper.insert(type);
     }
 

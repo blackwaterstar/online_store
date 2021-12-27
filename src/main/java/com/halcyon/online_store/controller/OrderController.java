@@ -1,15 +1,12 @@
 package com.halcyon.online_store.controller;
 
 
-import com.halcyon.online_store.entity.Order;
+import com.halcyon.online_store.entity.tOrder;
 import com.halcyon.online_store.entity.dto.CreateOrderDTO;
 import com.halcyon.online_store.entity.dto.OrderDTO;
 import com.halcyon.online_store.entity.dto.ResultDTO;
 import com.halcyon.online_store.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -49,31 +46,28 @@ public class OrderController {
         return orderService.getList(userId);
     }
 
-    /**
-     * 获取当前用户的所有订单
-     * @param userId
-     * @return
-     */
-    @RequestMapping("list1")
-    public List<CreateOrderDTO> getList1(Long userId){
-        return orderService.getList(userId);
-    }
+
+//    @RequestMapping("list1")
+//    public List<CreateOrderDTO> getList1(Long userId){
+//        return orderService.getList1(userId);
+//    }
 
 
-    @RequestMapping(value = "list2",method = RequestMethod.POST)
+    //根据用户账户和订单id查找订单
+    @RequestMapping("list2")
     public List<CreateOrderDTO> getList2(Long orderId,Long userId){
         return orderService.getList2(orderId,userId);
     }
 
 
 
-    @RequestMapping(value = "getOrder",method = RequestMethod.POST)
-    public Order getOrder(Long orderId){
+    @RequestMapping("getOrder")
+    public tOrder getOrder(Long orderId){
         return orderService.getorder(orderId);
     }
 
 
-    @RequestMapping(value = "updatestatme",method = RequestMethod.POST)
+    @RequestMapping("updatestatme")
     public Integer updatestatme(Long orderId){
         return orderService.updatestatme(orderId);
     }
