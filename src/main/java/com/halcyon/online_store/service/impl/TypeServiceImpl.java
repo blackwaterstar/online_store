@@ -47,8 +47,8 @@ public class TypeServiceImpl extends ServiceImpl<TypeMapper, Type> implements Ty
     }
 
     @Override
-    public Type selectType(Long tid) {
-        return typeMapper.selectById(tid);
+    public Type selectType(Long id) {
+        return typeMapper.selectOne(new QueryWrapper<Type>().eq("id",id));
     }
 
     @Override

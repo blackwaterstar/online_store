@@ -68,6 +68,16 @@ public class ProductController {
         return productService.allProduct();
     }
 
+    @RequestMapping("findProductByPid")
+    public Product findProductByPid(long pid){
+        return productService.findProductByPid(pid);
+    }
+
+    @RequestMapping("findProductByPpid")
+    public Product findProductByPpid(long ppid){
+        return productService.findProductByPpid(ppid);
+    }
+
 
 }
 

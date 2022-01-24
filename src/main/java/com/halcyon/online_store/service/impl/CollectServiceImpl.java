@@ -2,6 +2,7 @@ package com.halcyon.online_store.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.halcyon.online_store.common.util.MyUtil;
+import com.halcyon.online_store.entity.Cart;
 import com.halcyon.online_store.entity.Collect;
 import com.halcyon.online_store.entity.Log;
 import com.halcyon.online_store.entity.ProductInfo;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -49,8 +51,12 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> impl
             Collect collect = new Collect();
             collect.setPrice(productInfo.getPrice());
             collect.setUserId(userId);
-            collect.setUserId(ppid);
-            collect.setCollectId(MyUtil.getCurrentTimeForId());
+            collect.setPpid(ppid);
+            QueryWrapper<Collect> wrapper1 = new QueryWrapper<>();
+            wrapper1.select("max(collect_id) as maxid");
+            Map<String,Object> map = this.getMap(wrapper1);
+            long maxPid = (long) map.get("maxid");
+            collect.setCollectId(maxPid+1);
             Log log = new Log();
             log.setUserId(userId);
             log.setState(3);

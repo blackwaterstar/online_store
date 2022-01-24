@@ -48,13 +48,21 @@ public class OrderinfoServiceImpl extends ServiceImpl<OrderinfoMapper, Orderinfo
     }
 
     @Override
-    public int salesProduct(Long ppid) {
+    public Orderinfo getOrderInfo(Long orderId) {
         QueryWrapper<Orderinfo> wrapper = new QueryWrapper<>();
-        wrapper.select("sum(pcount) as count").eq("ppid",ppid);
+        wrapper.eq("order_id",orderId);
+        return orderinfoMapper.selectOne(wrapper);
+    }
+
+    @Override
+    public int salesProduct(Long pid) {
+        QueryWrapper<Orderinfo> wrapper = new QueryWrapper<>();
+        wrapper.select("sum(pcount) as count").eq("floor(ppid/100)",pid);
         Map<String,Object> map = this.getMap(wrapper);
         BigDecimal pconut = (BigDecimal) map.get("count");
         return pconut.intValue();
     }
+
 
 
 }

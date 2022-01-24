@@ -36,11 +36,11 @@ public class WalletController {
         return walletService.listWallet();
     }
     @RequestMapping("topUp")
-    public int topUp(Long userId,int money){
+    public int topUp(Long userId,Long money){
         return walletService.topUp(userId,money);
     }
     @RequestMapping("cost")
-    public int cost(Long userId,int money){
+    public int cost(Long userId,Long money){
         return walletService.cost(userId,money);
     }
 

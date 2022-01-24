@@ -87,7 +87,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public boolean checkUser(String userId) {
-        if (userMapper.selectById(userId) == null) {
+        if (userMapper.selectOne(new QueryWrapper<User>().eq("user_id",userId)) == null) {
             return true;
         } else return false;
     }

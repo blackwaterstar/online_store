@@ -19,7 +19,7 @@ public interface WalletService extends IService<Wallet> {
 
     List<Wallet> listWallet();
 
-    int topUp(Long userId,int money);
+    int topUp(Long userId,Long money);
 
-    int cost(Long userId, int money);
+    int cost(Long userId, Long money);
 }

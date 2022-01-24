@@ -38,7 +38,7 @@ public class WalletServiceImpl extends ServiceImpl<WalletMapper, Wallet> impleme
     }
 
     @Override
-    public int topUp(Long userId,int money){
+    public int topUp(Long userId,Long money){
         Wallet wallet=selectWallet(userId);
         wallet.setUserAmount(wallet.getUserAmount()+money);
         return walletMapper.updateById(wallet);
@@ -46,7 +46,7 @@ public class WalletServiceImpl extends ServiceImpl<WalletMapper, Wallet> impleme
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int cost(Long userId, int money) {
+    public int cost(Long userId, Long money) {
         Wallet wallet=selectWallet(userId);
         if(wallet.getUserAmount()>=money){
             wallet.setUserAmount(wallet.getUserAmount()-money);

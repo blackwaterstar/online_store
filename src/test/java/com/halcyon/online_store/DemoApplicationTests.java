@@ -35,6 +35,9 @@ class DemoApplicationTests {
     @Resource
     private TypeService typeService;
 
+    @Resource
+    private LogService logService;
+
     @Test
     void contextLoads() {
 
@@ -53,10 +56,12 @@ class DemoApplicationTests {
 //        System.out.println(userService.searchUserDto((long) 123456789));
 //        cartService.getCartVOList((long) 123456789).forEach(System.out::println);
 //        System.out.println(orderService.getList((long) 55555));
-        System.out.println(walletService.topUp((long) 55555, 1000));
+//        System.out.println(walletService.topUp((long) 55555, 1000));
 //        Type type = new Type();
 //        type.setName("教育类");
 //        typeService.addType(type);
+//        logService.getList().forEach(System.out::println);
+        System.out.println(productService.findProductByPpid(100601));
 
     }
 

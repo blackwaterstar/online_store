@@ -21,7 +21,7 @@ public interface TypeService extends IService<Type> {
 
     int updateType(Type type);
 
-    Type selectType(Long tid);
+    Type selectType(Long id);
 
     List<Type> listType();
 }

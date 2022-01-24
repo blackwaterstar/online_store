@@ -102,4 +102,14 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         return list;
     }
 
+    @Override
+    public Product findProductByPid(long pid) {
+        return productMapper.selectOne(new QueryWrapper<Product>().eq("pid",pid));
+    }
+
+    @Override
+    public Product findProductByPpid(long ppid) {
+        return productMapper.selectOne(new QueryWrapper<Product>().eq("pid",ppid/100));
+    }
+
 }

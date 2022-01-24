@@ -5,6 +5,7 @@ import com.halcyon.online_store.common.util.MyUtil;
 import com.halcyon.online_store.entity.Cart;
 import com.halcyon.online_store.entity.Log;
 import com.halcyon.online_store.entity.ProductInfo;
+import com.halcyon.online_store.entity.Type;
 import com.halcyon.online_store.entity.vo.CartVO;
 import com.halcyon.online_store.mapper.CartMapper;
 import com.halcyon.online_store.mapper.LogMapper;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -74,10 +76,14 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
         //如果商品不存在。则添加新的记录
         if(b){
             //封装tcart
+            QueryWrapper<Cart> wrapper = new QueryWrapper<>();
+            wrapper.select("max(cart_id) as maxid");
+            Map<String,Object> map = this.getMap(wrapper);
+            long maxPid = (long) map.get("maxid");
             Cart cart = new Cart();
             cart.setUserId(userId);
             cart.setPcount(pcount);
-            cart.setCartId(MyUtil.getCurrentTimeForId());
+            cart.setCartId(maxPid+1);
             cart.setPpid(ppid);
             //存到数据库里
             cartMapper.insert(cart);
@@ -93,12 +99,12 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
 
     @Override
     public int deleteCart(Long cartId) {
-        return cartMapper.deleteById(cartId);
+        return cartMapper.delete(new QueryWrapper<Cart>().eq("cart_id",cartId));
     }
 
     @Override
     public int deleteListCart(List cartIds) {
-        return cartMapper.deleteBatchIds(cartIds);
+        return cartMapper.delete(new QueryWrapper<Cart>().in("cart_id",cartIds));
     }
 
 }

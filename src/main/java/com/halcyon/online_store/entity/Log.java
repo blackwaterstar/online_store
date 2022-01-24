@@ -24,7 +24,7 @@ public class Log implements Serializable {
 
     private Long userId;
 
-    private LocalDateTime time;
+    private String time;
 
     private String controller;
 

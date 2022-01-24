@@ -38,8 +38,8 @@ public class TypeController {
         return typeService.updateType(type);
     }
     @RequestMapping("selectType")
-    public Type selectType(Long tid){
-        return typeService.selectType(tid);
+    public Type selectType(Long id){
+        return typeService.selectType(id);
     }
     @RequestMapping("listType")
     public List<Type> listType(){
