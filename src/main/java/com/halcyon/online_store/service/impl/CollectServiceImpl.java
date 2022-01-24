@@ -52,11 +52,17 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> impl
             collect.setPrice(productInfo.getPrice());
             collect.setUserId(userId);
             collect.setPpid(ppid);
-            QueryWrapper<Collect> wrapper1 = new QueryWrapper<>();
-            wrapper1.select("max(collect_id) as maxid");
-            Map<String,Object> map = this.getMap(wrapper1);
-            long maxPid = (long) map.get("maxid");
-            collect.setCollectId(maxPid+1);
+            int number = collectMapper.selectCount(null);
+            long maxpid=0;
+            if(number==0){
+                maxpid=123456;
+            }else {
+                QueryWrapper<Collect> wrapper1 = new QueryWrapper<>();
+                wrapper.select("max(cart_id) as maxid");
+                Map<String, Object> map = this.getMap(wrapper1);
+                maxpid=(long)map.get("maxid")+1;
+            }
+            collect.setCollectId(maxpid+1);
             Log log = new Log();
             log.setUserId(userId);
             log.setState(3);

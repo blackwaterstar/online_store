@@ -21,9 +21,11 @@ public interface CommentService extends IService<Comment> {
 
     Comment selectComment(String commentId);
 
-    List<Comment> selectListComment(String orderId);
+    List<Comment> selectListComment(String ppid);
 
     int likesComment(String commentId);
 
     List<Comment> selectCommentById(Long ppid);
+
+    List<Comment> selectListCommentByOrderId(String orderId);
 }

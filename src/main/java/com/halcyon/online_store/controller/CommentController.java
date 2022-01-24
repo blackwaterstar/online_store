@@ -44,8 +44,13 @@ public class CommentController {
     }
 
     @RequestMapping("selectListComment")
-    public List<Comment> selectListComment(String orderId){
-        return commentService.selectListComment(orderId);
+    public List<Comment> selectListComment(String ppid){
+        return commentService.selectListComment(ppid);
+    }
+
+    @RequestMapping("selectListCommentByOrderId")
+    public List<Comment> selectListCommentByOrderId(String orderId){
+        return commentService.selectListCommentByOrderId(orderId);
     }
 
     @RequestMapping("likesComment")

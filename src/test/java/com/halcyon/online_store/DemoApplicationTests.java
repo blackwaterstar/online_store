@@ -61,7 +61,7 @@ class DemoApplicationTests {
 //        type.setName("教育类");
 //        typeService.addType(type);
 //        logService.getList().forEach(System.out::println);
-        System.out.println(productService.findProductByPpid(100601));
+        System.out.println(productService.findProductByPpid(100101));
 
     }
 

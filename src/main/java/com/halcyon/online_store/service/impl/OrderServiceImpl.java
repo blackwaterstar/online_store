@@ -199,6 +199,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
         ProductInfo productInfo = productInfoService.selectProductInfo(ppid);
         opd.setPname(productInfo.getPname());
         opd.setPrice(productInfo.getPrice());
+        opd.setPpid(ppid);
         return opd;
 
     }
@@ -271,6 +272,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
             ProductInfo productInfo = productInfoService.selectProductInfo(orderinfo.getPpid());
             int number= (int) ((productInfo.getPnumber()-orderinfo.getPcount()));
             productInfo.setPnumber(number);
+            int allnumber= (int) ((productInfo.getAllsalenumber()+orderinfo.getPcount()));
+            productInfo.setAllsalenumber(allnumber);
             productInfoService.updateProductInfo(productInfo);
 
         });

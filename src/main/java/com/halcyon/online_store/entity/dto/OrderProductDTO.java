@@ -21,5 +21,6 @@ public class OrderProductDTO {
      private String pname;
      private Long price;
      private Long pcount;
+     private Long ppid;
 
 }

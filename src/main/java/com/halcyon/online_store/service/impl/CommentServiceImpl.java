@@ -47,8 +47,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     }
 
     @Override
-    public List<Comment> selectListComment(String orderId) {
-        return commentMapper.selectList(new QueryWrapper<Comment>().eq("order_id",orderId).orderByAsc("comment_id"));
+    public List<Comment> selectListComment(String ppid) {
+        return commentMapper.selectList(new QueryWrapper<Comment>().eq("ppid",ppid).orderByAsc("comment_id"));
     }
 
     @Override
@@ -61,13 +61,19 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Override
     public List<Comment> selectCommentById(Long ppid) {
-        QueryWrapper<Orderinfo> wrapper = new QueryWrapper<>();
-        wrapper.select("order_id").eq(" ppid",ppid);
-        List<Orderinfo> list = orderinfoMapper.selectList(wrapper);
-        List<Long> list1 = new ArrayList<>();
-        list.forEach(orderinfo -> list1.add(orderinfo.getOrderId()));
-      //  return commentMapper.selectBatchIds(list1);
-        return  commentMapper.selectList(new QueryWrapper<Comment>().in("order_id",list1));
+//        QueryWrapper<Orderinfo> wrapper = new QueryWrapper<>();
+//        wrapper.select("order_id").eq(" ppid",ppid);
+//        List<Orderinfo> list = orderinfoMapper.selectList(wrapper);
+//        List<Long> list1 = new ArrayList<>();
+//        list.forEach(orderinfo -> list1.add(orderinfo.getOrderId()));
+//      //  return commentMapper.selectBatchIds(list1);
+        return  commentMapper.selectList(new QueryWrapper<Comment>().eq("ppid",ppid));
+
+    }
+
+    @Override
+    public List<Comment> selectListCommentByOrderId(String orderId) {
+        return commentMapper.selectList(new QueryWrapper<Comment>().eq("order_id",orderId));
 
     }
 }

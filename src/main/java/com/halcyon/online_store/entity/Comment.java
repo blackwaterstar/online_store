@@ -21,7 +21,7 @@ import lombok.EqualsAndHashCode;
 
       private Long commentId;
 
-    private Long orderId;
+    private Long ppid;
 
     private Integer userId;
 
@@ -34,6 +34,8 @@ import lombok.EqualsAndHashCode;
     private String createtime;
 
     private String updatime;
+
+  private Long orderId;
 
 
 }

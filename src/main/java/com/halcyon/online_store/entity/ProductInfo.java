@@ -41,5 +41,10 @@ import lombok.EqualsAndHashCode;
      */
       private Integer pnumber;
 
+     /**总销量
+     * *
+     */
+       private Integer allsalenumber;
+
 
 }

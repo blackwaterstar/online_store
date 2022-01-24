@@ -58,7 +58,7 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
     }
 
 
-    public void list1(Long userId, Long ppid, Long pcount) {
+    public void addCart(Long userId, Long ppid, Long pcount) {
         //1.获取所有的购物车信息
         List<Cart> carts = getAllCarts(userId);
 
@@ -75,15 +75,21 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
         }
         //如果商品不存在。则添加新的记录
         if(b){
-            //封装tcart
-            QueryWrapper<Cart> wrapper = new QueryWrapper<>();
-            wrapper.select("max(cart_id) as maxid");
-            Map<String,Object> map = this.getMap(wrapper);
-            long maxPid = (long) map.get("maxid");
             Cart cart = new Cart();
+            //封装tcart
+           int number = cartMapper.selectCount(null);
+           long maxpid=0;
+           if(number==0){
+              maxpid=123456;
+           }else {
+               QueryWrapper<Cart> wrapper = new QueryWrapper<>();
+               wrapper.select("max(cart_id) as maxid");
+               Map<String, Object> map = this.getMap(wrapper);
+               maxpid=(long)map.get("maxid")+1;
+           }
             cart.setUserId(userId);
             cart.setPcount(pcount);
-            cart.setCartId(maxPid+1);
+            cart.setCartId(maxpid+1);
             cart.setPpid(ppid);
             //存到数据库里
             cartMapper.insert(cart);
