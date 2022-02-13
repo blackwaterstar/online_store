@@ -46,6 +46,7 @@ public class ProductInfoServiceImpl extends ServiceImpl<ProductInfoMapper, Produ
     public int addProductInfo(ProductInfo productInfo) {
         int a = 1+productInfoMapper.selectCount(new QueryWrapper<ProductInfo>().eq("pid",productInfo.getPid()));
         productInfo.setPpid((int) (productInfo.getPid()*100+a));
+        productInfo.setAllsalenumber(0);
         return productInfoMapper.insert(productInfo);
     }
 

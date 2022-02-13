@@ -21,7 +21,7 @@ public class CreateOrderDTO {
         商品数量
      */
 
-    private Date createdTime;
+    private String createdTime;
     private Long orderId;
     private BigDecimal orderPrice;
 

@@ -2,6 +2,7 @@ package com.halcyon.online_store.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.halcyon.online_store.entity.*;
 import com.halcyon.online_store.entity.dto.CreateOrderDTO;
 import com.halcyon.online_store.entity.dto.OrderDTO;
@@ -191,6 +192,48 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
         return cods;
     }
 
+    public List<CreateOrderDTO> getList1(Long userId) {
+        QueryWrapper<tOrder> wrapper = new QueryWrapper<>();
+        wrapper.eq(" user_id",userId).eq("paystatue","已付款");
+        List<tOrder> tOrders = orderMapper.selectList(wrapper);
+        List<CreateOrderDTO> cods = new ArrayList<CreateOrderDTO>();
+
+        tOrders.forEach(order -> {
+            CreateOrderDTO cod = new CreateOrderDTO();
+            cod.setOrderId(order.getOrderId());
+            BigDecimal bd = new BigDecimal(order.getOrderPrice().longValue());
+            cod.setOrderPrice(bd);
+            //将cod存入到cods集合中
+            cods.add(cod);
+        });
+
+        //遍历cods
+        //根据订单编号，去订单详情表中获取该订单的所欲商品的id及商品数量
+        //还要根据商品的id取商品表里获取商品名称和商品价格
+
+        cods.forEach( cod->{
+            //根据订单编号，去订单详情表中获取该订单的所有商品的id及商品数量
+            List<Orderinfo> orderinfos =  orderInfoService.getOrderInfosByOrderId(cod.getOrderId());
+            //封装OrderProductDTO
+            List<OrderProductDTO> opds = new ArrayList<>();
+            orderinfos.forEach(orderinfo ->{
+                //通过商品id封装OrderProductDTO
+                OrderProductDTO opd = getOrderProductDTO(orderinfo.getPpid());
+                //从orderinfo中获取商品数量存入到opd中
+                opd.setPcount(orderinfo.getPcount());
+                //opd封装完毕
+                //存入到集合中
+                opds.add(opd);
+            });
+
+            //将商品集合存入到CreateOrderDTO对象中
+            cod.setProducts(opds);
+//            getOrderProductDTO()
+
+        });
+        return cods;
+    }
+
     /**
      * 根据商品id，去数据库获取该商品的信息，并封装成OrderProductDTO对象
      */
@@ -206,36 +249,25 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
 
 
 
-    @Override
-    public List<CreateOrderDTO> getList2(Long orderId, Long userId) {
-         /*
-    订单的创建时间
-    订单编号
-    订单总金额
-
-    商品集合：
-        商品名称
-        商品价格
-        商品数量
-     */
+    public List<CreateOrderDTO> getList2(Long userId) {
         QueryWrapper<tOrder> wrapper = new QueryWrapper<>();
-        wrapper.eq("user_id",userId);
-        wrapper.like("order_id",orderId);
+        wrapper.eq(" user_id",userId).eq("paystatue","未付款");
         List<tOrder> tOrders = orderMapper.selectList(wrapper);
-
         List<CreateOrderDTO> cods = new ArrayList<CreateOrderDTO>();
+
         tOrders.forEach(order -> {
             CreateOrderDTO cod = new CreateOrderDTO();
             cod.setOrderId(order.getOrderId());
             BigDecimal bd = new BigDecimal(order.getOrderPrice().longValue());
             cod.setOrderPrice(bd);
+            cod.setCreatedTime(order.getCreatedTime());
             //将cod存入到cods集合中
             cods.add(cod);
         });
 
         //遍历cods
-        //根据订单编号，从订单详情表中获取该订单的所欲商品的id及商品数量
-        //根据商品的id取商品表里获取商品名称和商品价格
+        //根据订单编号，去订单详情表中获取该订单的所欲商品的id及商品数量
+        //还要根据商品的id取商品表里获取商品名称和商品价格
 
         cods.forEach( cod->{
             //根据订单编号，去订单详情表中获取该订单的所有商品的id及商品数量
@@ -243,7 +275,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
             //封装OrderProductDTO
             List<OrderProductDTO> opds = new ArrayList<>();
             orderinfos.forEach(orderinfo ->{
-                //通过商品id封装DTO
+                //通过商品id封装OrderProductDTO
                 OrderProductDTO opd = getOrderProductDTO(orderinfo.getPpid());
                 //从orderinfo中获取商品数量存入到opd中
                 opd.setPcount(orderinfo.getPcount());
@@ -255,6 +287,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
             //将商品集合存入到CreateOrderDTO对象中
             cod.setProducts(opds);
 //            getOrderProductDTO()
+
 
         });
         return cods;
@@ -281,5 +314,15 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
         tOrder.setPaystatue("已付款");
         return orderMapper.updateById(tOrder);
     }
+
+    @Override
+    public Integer updateOrder(tOrder order) {
+        return orderMapper.update(order,new UpdateWrapper<tOrder>().eq("order_id",order.getOrderId()));
+    }
+
+//    @Override
+//    public Integer apiUpdateOrder(tOrder tOrder) {
+//        return orderMapper.update(tOrder, new UpdateWrapper<tOrder>().eq("orderId", tOrder.getOrderId()));
+//    }
 
 }

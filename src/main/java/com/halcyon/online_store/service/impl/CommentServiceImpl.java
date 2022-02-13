@@ -3,8 +3,11 @@ package com.halcyon.online_store.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.halcyon.online_store.entity.Comment;
 import com.halcyon.online_store.entity.Orderinfo;
+import com.halcyon.online_store.entity.ProductInfo;
+import com.halcyon.online_store.entity.dto.CommentDto;
 import com.halcyon.online_store.mapper.CommentMapper;
 import com.halcyon.online_store.mapper.OrderinfoMapper;
+import com.halcyon.online_store.mapper.ProductInfoMapper;
 import com.halcyon.online_store.service.CommentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -29,6 +32,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Resource
     private OrderinfoMapper orderinfoMapper;
+
+    @Resource
+    private ProductInfoMapper productInfoMapper;
 
 
     @Override
@@ -60,20 +66,33 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     }
 
     @Override
-    public List<Comment> selectCommentById(Long ppid) {
-//        QueryWrapper<Orderinfo> wrapper = new QueryWrapper<>();
-//        wrapper.select("order_id").eq(" ppid",ppid);
-//        List<Orderinfo> list = orderinfoMapper.selectList(wrapper);
-//        List<Long> list1 = new ArrayList<>();
-//        list.forEach(orderinfo -> list1.add(orderinfo.getOrderId()));
-//      //  return commentMapper.selectBatchIds(list1);
-        return  commentMapper.selectList(new QueryWrapper<Comment>().eq("ppid",ppid));
+    public List<CommentDto> selectCommentById(Long ppid) {
+        List<CommentDto> commentDtos = new ArrayList<CommentDto>();
+        List<Comment> comments = commentMapper.selectList(new QueryWrapper<Comment>().eq("ppid", ppid));
+        comments.forEach(comment -> {
+            ProductInfo productInfo = productInfoMapper.selectOne(new QueryWrapper<ProductInfo>().eq("ppid",
+                    comment.getPpid()));
+            CommentDto commentDto = new CommentDto();
+            commentDto.setComment(comment);
+            commentDto.setPname(productInfo.getPname());
+            commentDtos.add(commentDto);
+        });
+        return  commentDtos;
 
     }
 
     @Override
-    public List<Comment> selectListCommentByOrderId(String orderId) {
-        return commentMapper.selectList(new QueryWrapper<Comment>().eq("order_id",orderId));
-
+    public List<CommentDto> selectListCommentByOrderId(String orderId) {
+        List<CommentDto> commentDtos = new ArrayList<CommentDto>();
+        List<Comment> comments = commentMapper.selectList(new QueryWrapper<Comment>().eq("order_id", orderId));
+        comments.forEach(comment -> {
+            ProductInfo productInfo = productInfoMapper.selectOne(new QueryWrapper<ProductInfo>().eq("ppid",
+                    comment.getPpid()));
+            CommentDto commentDto = new CommentDto();
+            commentDto.setComment(comment);
+            commentDto.setPname(productInfo.getPname());
+            commentDtos.add(commentDto);
+        });
+        return commentDtos;
     }
 }

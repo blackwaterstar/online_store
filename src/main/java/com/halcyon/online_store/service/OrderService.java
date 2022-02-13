@@ -24,12 +24,16 @@ public interface OrderService extends IService<tOrder> {
 
     List<CreateOrderDTO> getList(Long userId);
 //    List<CreateOrderDTO> getList1(Long userId);
+List<CreateOrderDTO> getList1(Long userId);
 
-    List<CreateOrderDTO> getList2(Long orderId, Long userId);
+    List<CreateOrderDTO> getList2(Long userId);
 
     tOrder getorder(Long orderId);
 
     Integer updatestatme(Long orderId);
 
+    Integer updateOrder(tOrder order);
 
+
+    // Integer apiUpdateOrder(tOrder tOrder);
 }

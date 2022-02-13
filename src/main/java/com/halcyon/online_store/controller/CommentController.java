@@ -3,6 +3,7 @@ package com.halcyon.online_store.controller;
 
 import com.halcyon.online_store.entity.Comment;
 import com.halcyon.online_store.entity.Product;
+import com.halcyon.online_store.entity.dto.CommentDto;
 import com.halcyon.online_store.service.CommentService;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -49,7 +50,7 @@ public class CommentController {
     }
 
     @RequestMapping("selectListCommentByOrderId")
-    public List<Comment> selectListCommentByOrderId(String orderId){
+    public List<CommentDto> selectListCommentByOrderId(String orderId){
         return commentService.selectListCommentByOrderId(orderId);
     }
 
@@ -59,7 +60,7 @@ public class CommentController {
     }
 
     @RequestMapping("selectCommentById")
-    public List<Comment> selectCommentById(Long ppid){
+    public List<CommentDto> selectCommentById(Long ppid){
         return commentService.selectCommentById(ppid);
     }
 

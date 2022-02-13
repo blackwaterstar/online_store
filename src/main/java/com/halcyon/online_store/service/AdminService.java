@@ -2,6 +2,7 @@ package com.halcyon.online_store.service;
 
 import com.halcyon.online_store.entity.Admin;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.halcyon.online_store.entity.dto.LoginDTO;
 
 /**
  * <p>
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface AdminService extends IService<Admin> {
 
+    int login(String username, String password);
 }

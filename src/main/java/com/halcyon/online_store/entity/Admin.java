@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
 
     private String address;
 
-
+    @TableField("detailAddress")
     private String detailAddress;
 
     private String telephone;

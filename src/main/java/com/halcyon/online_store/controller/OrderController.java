@@ -31,7 +31,6 @@ public class OrderController {
     @RequestMapping("addOrder")
     public ResultDTO addOrder(OrderDTO orderDTO){
         System.out.println(orderDTO);
-
         return  orderService.addOrder(orderDTO);
 
     }
@@ -46,6 +45,16 @@ public class OrderController {
         return orderService.getList(userId);
     }
 
+    @RequestMapping("list1")
+    public List<CreateOrderDTO> getList1(Long userId){
+        return orderService.getList1(userId);
+    }
+
+    @RequestMapping("list2")
+    public List<CreateOrderDTO> getList2(Long userId){
+        return orderService.getList2(userId);
+    }
+
 
 //    @RequestMapping("list1")
 //    public List<CreateOrderDTO> getList1(Long userId){
@@ -53,11 +62,11 @@ public class OrderController {
 //    }
 
 
-    //根据用户账户和订单id查找订单
-    @RequestMapping("list2")
-    public List<CreateOrderDTO> getList2(Long orderId,Long userId){
-        return orderService.getList2(orderId,userId);
-    }
+//    //根据用户账户和订单id查找订单
+//    @RequestMapping("list2")
+//    public List<CreateOrderDTO> getList2(Long orderId,Long userId){
+//        return orderService.getList2(orderId,userId);
+//    }
 
 
 
@@ -67,9 +76,20 @@ public class OrderController {
     }
 
 
+
     @RequestMapping("updatestatme")
     public Integer updatestatme(Long orderId){
         return orderService.updatestatme(orderId);
+    }
+
+
+//    @RequestMapping("apiUpdateOrder")
+//    public Integer apiUpdateOrder(tOrder tOrder){
+//        return orderService.apiUpdateOrder(tOrder);
+//    }
+    @RequestMapping("updateOrder")
+    public Integer updateOrder(tOrder order){
+        return  orderService.updateOrder(order);
     }
 
 
