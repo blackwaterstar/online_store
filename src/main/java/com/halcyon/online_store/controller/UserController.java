@@ -40,6 +40,11 @@ public class UserController {
         return userService.searchUserDto(userid);
     }
 
+    @RequestMapping("searchUserDto1")
+    public List<LoginDTO> searchUserDto1(String username ){
+        return userService.searchUserDto1(username);
+    }
+
     @RequestMapping("register")
     public boolean register (User user){
         return userService.register(user);

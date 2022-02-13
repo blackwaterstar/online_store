@@ -24,6 +24,10 @@ public class CreateOrderDTO {
     private String createdTime;
     private Long orderId;
     private BigDecimal orderPrice;
+    private Long userId;
+    private String orderUser;
+    private String orderTel;
+    private String orderAddr;
 
     private List<OrderProductDTO> products;
 

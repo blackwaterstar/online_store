@@ -58,6 +58,11 @@ public class ProductController {
         return productService.searchProduct(pname);
     }
 
+    @RequestMapping("searchProduct1")
+    public List<AllProductDTO> searchProduct1(String pname){
+        return productService.searchProduct1(pname);
+    }
+
     @RequestMapping("listProduct")
     public List<Product> listProduct(){
         return productService.listProduct();

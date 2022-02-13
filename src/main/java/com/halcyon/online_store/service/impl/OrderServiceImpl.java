@@ -12,6 +12,7 @@ import com.halcyon.online_store.entity.vo.OrderVO;
 import com.halcyon.online_store.mapper.CartMapper;
 import com.halcyon.online_store.mapper.OrderMapper;
 import com.halcyon.online_store.mapper.OrderinfoMapper;
+import com.halcyon.online_store.mapper.ProductInfoMapper;
 import com.halcyon.online_store.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
     @Resource
     private AddressService addressService;
 
+    @Resource
+    private ProductInfoMapper productInfoMapper;
 
 
     /**
@@ -158,6 +161,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
 
         tOrders.forEach(order -> {
             CreateOrderDTO cod = new CreateOrderDTO();
+            cod.setUserId(userId);
             cod.setOrderId(order.getOrderId());
             BigDecimal bd = new BigDecimal(order.getOrderPrice().longValue());
             cod.setOrderPrice(bd);
@@ -200,6 +204,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
 
         tOrders.forEach(order -> {
             CreateOrderDTO cod = new CreateOrderDTO();
+            cod.setUserId(userId);
+            cod.setOrderUser(order.getOrderUser());
+            cod.setOrderAddr(order.getOrderAddr());
+            cod.setOrderTel(order.getOrderTel());
             cod.setOrderId(order.getOrderId());
             BigDecimal bd = new BigDecimal(order.getOrderPrice().longValue());
             cod.setOrderPrice(bd);
@@ -257,6 +265,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
 
         tOrders.forEach(order -> {
             CreateOrderDTO cod = new CreateOrderDTO();
+            cod.setUserId(userId);
+            cod.setOrderUser(order.getOrderUser());
+            cod.setOrderAddr(order.getOrderAddr());
+            cod.setOrderTel(order.getOrderTel());
             cod.setOrderId(order.getOrderId());
             BigDecimal bd = new BigDecimal(order.getOrderPrice().longValue());
             cod.setOrderPrice(bd);
@@ -294,6 +306,53 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
     }
 
     @Override
+    public List<CreateOrderDTO> getList3() {
+        QueryWrapper<tOrder> wrapper = new QueryWrapper<>();
+        wrapper.eq("paystatue","已付款");
+        List<tOrder> tOrders = orderMapper.selectList(wrapper);
+        List<CreateOrderDTO> cods = new ArrayList<CreateOrderDTO>();
+        tOrders.forEach(order -> {
+            CreateOrderDTO cod = new CreateOrderDTO();
+            cod.setUserId(order.getUserId());
+            cod.setOrderUser(order.getOrderUser());
+            cod.setOrderAddr(order.getOrderAddr());
+            cod.setOrderTel(order.getOrderTel());
+            cod.setOrderId(order.getOrderId());
+            BigDecimal bd = new BigDecimal(order.getOrderPrice().longValue());
+            cod.setOrderPrice(bd);
+            cod.setCreatedTime(order.getCreatedTime());
+            //将cod存入到cods集合中
+            cods.add(cod);
+        });
+        //遍历cods
+        //根据订单编号，去订单详情表中获取该订单的所欲商品的id及商品数量
+        //还要根据商品的id取商品表里获取商品名称和商品价格
+        cods.forEach( cod->{
+            //根据订单编号，去订单详情表中获取该订单的所有商品的id及商品数量
+            List<Orderinfo> orderinfos =  orderInfoService.getOrderInfosByOrderId(cod.getOrderId());
+            //封装OrderProductDTO
+            List<OrderProductDTO> opds = new ArrayList<>();
+            orderinfos.forEach(orderinfo ->{
+                //通过商品id封装OrderProductDTO
+                OrderProductDTO opd = getOrderProductDTO(orderinfo.getPpid());
+                //从orderinfo中获取商品数量存入到opd中
+                opd.setPcount(orderinfo.getPcount());
+                ProductInfo productInfo = productInfoMapper.selectOne(new QueryWrapper<ProductInfo>().eq("ppid",
+                        orderinfo.getPpid()));
+                opd.setPname(productInfo.getPname());
+                opd.setPrice(productInfo.getPrice());
+                //opd封装完毕
+                //存入到集合中
+                opds.add(opd);
+            });
+            //将商品集合存入到CreateOrderDTO对象中
+            cod.setProducts(opds);
+//            getOrderProductDTO()
+        });
+        return cods;
+    }
+
+    @Override
     public tOrder getorder(Long orderId){
         return  orderMapper.selectOne(new QueryWrapper<tOrder>().eq("order_id",orderId));
     }
@@ -319,6 +378,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
     public Integer updateOrder(tOrder order) {
         return orderMapper.update(order,new UpdateWrapper<tOrder>().eq("order_id",order.getOrderId()));
     }
+
+
 
 //    @Override
 //    public Integer apiUpdateOrder(tOrder tOrder) {

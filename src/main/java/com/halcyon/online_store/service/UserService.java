@@ -35,5 +35,7 @@ public interface UserService extends IService<User> {
     List<LoginDTO> listUserDto();
 
     LoginDTO searchUserDto(Long userid);
+
+    List<LoginDTO> searchUserDto1(String username);
 }
 

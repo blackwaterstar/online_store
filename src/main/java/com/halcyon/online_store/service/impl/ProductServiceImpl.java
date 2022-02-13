@@ -103,6 +103,24 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     }
 
     @Override
+    public List<AllProductDTO> searchProduct1(String pname) {
+        List<Product> products = productMapper.selectList(new QueryWrapper<Product>().like("pname",pname));
+        List<AllProductDTO> list = new ArrayList<>();
+        products.forEach(product -> {
+            List<ProductInfo> productInfos = productInfoMapper.selectList(new QueryWrapper<ProductInfo>().eq("pid",
+                    product.getPid()));
+            AllProductDTO productDTO = new AllProductDTO();
+            productDTO.setPid(product.getPid());
+            productDTO.setPname(product.getPname());
+            productDTO.setTid(product.getTid());
+            productDTO.setTpId(product.getTpId());
+            productDTO.setProductInfos(productInfos);
+            list.add(productDTO);
+        });
+        return list;
+    }
+
+    @Override
     public Product findProductByPid(long pid) {
         return productMapper.selectOne(new QueryWrapper<Product>().eq("pid",pid));
     }
@@ -111,5 +129,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     public Product findProductByPpid(long ppid) {
         return productMapper.selectOne(new QueryWrapper<Product>().eq("pid",ppid/100));
     }
+
+
 
 }

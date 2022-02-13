@@ -156,5 +156,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         loginDto.setUserAmount(wallet.getUserAmount());
         loginDto.setUserConsume(wallet.getUserConsume());
         return loginDto;
+
+    }
+
+    @Override
+    public List<LoginDTO> searchUserDto1(String username) {
+
+        List<User> users = userMapper.selectList(new QueryWrapper<User>().like("username", username));
+        ArrayList<LoginDTO> loginDTOS = new ArrayList<>();
+        users.forEach(user -> {
+            Wallet wallet1 = walletMapper.selectOne(new QueryWrapper<Wallet>().eq("user_id", user.getUserId()));
+            LoginDTO loginDto = new LoginDTO();
+            loginDto.setUser(user);
+            loginDto.setUserAmount(wallet1.getUserAmount());
+            loginDto.setUserConsume(wallet1.getUserConsume());
+            loginDTOS.add(loginDto);
+        });
+
+        return loginDTOS;
     }
 }

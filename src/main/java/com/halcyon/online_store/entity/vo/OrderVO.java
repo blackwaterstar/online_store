@@ -1,6 +1,7 @@
 package com.halcyon.online_store.entity.vo;
 
 import com.halcyon.online_store.entity.ProductInfo;
+import com.halcyon.online_store.entity.tOrder;
 import lombok.Data;
 
 import java.util.List;

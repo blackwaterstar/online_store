@@ -37,5 +37,7 @@ public interface ProductService extends IService<Product> {
     Product findProductByPid(long pid);
 
     Product findProductByPpid(long ppid);
+
+    List<AllProductDTO> searchProduct1(String pname);
 }
 

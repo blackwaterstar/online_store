@@ -45,14 +45,31 @@ public class OrderController {
         return orderService.getList(userId);
     }
 
+    /**
+     * 获取用户已付款订单
+     * @return
+     */
     @RequestMapping("list1")
     public List<CreateOrderDTO> getList1(Long userId){
         return orderService.getList1(userId);
     }
 
+    /**
+     * 获取用户未付款订单
+     * @return
+     */
     @RequestMapping("list2")
     public List<CreateOrderDTO> getList2(Long userId){
         return orderService.getList2(userId);
+    }
+
+    /**
+     * 获取所有订单
+     * @return
+     */
+    @RequestMapping("list3")
+    public List<CreateOrderDTO> getList(){
+        return orderService.getList3();
     }
 
 
