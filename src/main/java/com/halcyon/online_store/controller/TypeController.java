@@ -37,6 +37,7 @@ public class TypeController {
     public int updateType(Type type){
         return typeService.updateType(type);
     }
+
     @RequestMapping("selectType")
     public Type selectType(Long id){
         return typeService.selectType(id);

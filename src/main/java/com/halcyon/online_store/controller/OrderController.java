@@ -30,7 +30,6 @@ public class OrderController {
 
     @RequestMapping("addOrder")
     public ResultDTO addOrder(OrderDTO orderDTO){
-        System.out.println(orderDTO);
         return  orderService.addOrder(orderDTO);
 
     }
@@ -52,6 +51,11 @@ public class OrderController {
     @RequestMapping("list1")
     public List<CreateOrderDTO> getList1(Long userId){
         return orderService.getList1(userId);
+    }
+
+    @RequestMapping("list4")
+    public List<CreateOrderDTO> getList4(Long userId){
+        return orderService.getList4(userId);
     }
 
     /**
@@ -107,6 +111,11 @@ public class OrderController {
     @RequestMapping("updateOrder")
     public Integer updateOrder(tOrder order){
         return  orderService.updateOrder(order);
+    }
+
+    @RequestMapping("deleteOrder")
+    public Integer deleteOrder(Long orderId){
+        return  orderService.deleteOrder(orderId);
     }
 
 

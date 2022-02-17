@@ -66,8 +66,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
      *
      *
      */
-    //方法抛出异常，就会回滚，数据库里面的数据也会回滚。
-    @Transactional(rollbackFor = Exception.class)  //方法A
+    @Transactional(rollbackFor = Exception.class)
     public void addOrder(OrderVO orderVO) {
         //从orderVO中获得order对象
         tOrder tOrder = orderVO.getTOrder();
@@ -76,11 +75,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
         List<ProductInfo> productInfos = orderVO.getProductInfos();
         //将order存到数据库的订单表里
         orderMapper.insert(tOrder);
-        //====================
-
         //将数据存入到订单详情表中
-        //需要封装一个List<TOrderinfo>
-        //将List<TProduct>==> List<TOrderinfo>
         //1.遍历
         Iterator<ProductInfo> iterator = productInfos.iterator();
         Iterator<Long> iterator1 = pcounts.iterator();
@@ -94,7 +89,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
             orderinfo.setPpid(Long.valueOf(productInfo.getPpid()));
             orderinfo.setPcount(pcount);
             list.add(orderinfo);
-
         }
         try {
             orderInfoService.addOrderInfo(list); //方法B  出现了异常
@@ -102,20 +96,16 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     /**
      * 收到一个OrderDTO,转换成OrderVO，再调用addOrder
      */
     public ResultDTO addOrder(OrderDTO orderDTO) {
-
         ResultDTO resultDTO = new ResultDTO();
         try {
             //1.封装OrderVO中的TOrder
             OrderVO orderVO = new OrderVO();
-
             tOrder tOrder = new tOrder();
             QueryWrapper<tOrder> wrapper = new QueryWrapper<>();
             wrapper.select("max(order_id) as maxid");
@@ -128,10 +118,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
             tOrder.setOrderAddr(orderDTO.getOrderAddr());
             tOrder.setOrderPrice(orderDTO.getOrderPrice());
             tOrder.setPaystatue("未付款");
-            //orderVO.settOrder(tOrder);
             orderVO.setTOrder(tOrder);
             //2.封装OrderVO中的List<Products>
-//        orderVO.setProducts();
             List<Long> ppids = orderDTO.getPpids();
             List<Long> pcounts = orderDTO.getPcounts();
             //根据商品id集合获得相应的商品集合
@@ -141,11 +129,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
             addOrder(orderVO);
             resultDTO.setResult(true);
             resultDTO.setMessage("下单成功");
-
         } catch (Exception e) {
             e.printStackTrace();
             resultDTO.setResult(false);
-            resultDTO.setMessage("你点背，下单失败");
+            resultDTO.setMessage("下单失败");
         }
         return resultDTO;
     }
@@ -158,7 +145,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
         wrapper.eq(" user_id",userId);
         List<tOrder> tOrders = orderMapper.selectList(wrapper);
         List<CreateOrderDTO> cods = new ArrayList<CreateOrderDTO>();
-
         tOrders.forEach(order -> {
             CreateOrderDTO cod = new CreateOrderDTO();
             cod.setUserId(userId);
@@ -168,30 +154,20 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
             //将cod存入到cods集合中
             cods.add(cod);
         });
-
-        //遍历cods
-        //根据订单编号，去订单详情表中获取该订单的所欲商品的id及商品数量
-        //还要根据商品的id取商品表里获取商品名称和商品价格
-
+        //遍历cod,根据订单编号，去订单详情表中获取该订单的所欲商品的id及商品数量,根据商品的id取商品表里获取商品名称和商品价格
         cods.forEach( cod->{
             //根据订单编号，去订单详情表中获取该订单的所有商品的id及商品数量
             List<Orderinfo> orderinfos =  orderInfoService.getOrderInfosByOrderId(cod.getOrderId());
-            //封装OrderProductDTO
             List<OrderProductDTO> opds = new ArrayList<>();
             orderinfos.forEach(orderinfo ->{
                 //通过商品id封装OrderProductDTO
                 OrderProductDTO opd = getOrderProductDTO(orderinfo.getPpid());
                 //从orderinfo中获取商品数量存入到opd中
                 opd.setPcount(orderinfo.getPcount());
-                //opd封装完毕
-                //存入到集合中
                 opds.add(opd);
             });
-
             //将商品集合存入到CreateOrderDTO对象中
             cod.setProducts(opds);
-//            getOrderProductDTO()
-
         });
         return cods;
     }
@@ -350,6 +326,60 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
 //            getOrderProductDTO()
         });
         return cods;
+    }
+
+    public List<CreateOrderDTO> getList4(Long userId) {
+        QueryWrapper<tOrder> wrapper = new QueryWrapper<>();
+        if (userId==null||userId.equals("")) {
+            wrapper.eq("paystatue","已付款");
+        }else {
+            wrapper.like(" user_id",userId).eq("paystatue","已付款");
+        }
+        List<tOrder> tOrders = orderMapper.selectList(wrapper);
+        List<CreateOrderDTO> cods = new ArrayList<CreateOrderDTO>();
+
+        tOrders.forEach(order -> {
+            CreateOrderDTO cod = new CreateOrderDTO();
+            cod.setUserId(order.getUserId());
+            cod.setOrderUser(order.getOrderUser());
+            cod.setOrderAddr(order.getOrderAddr());
+            cod.setOrderTel(order.getOrderTel());
+            cod.setOrderId(order.getOrderId());
+            BigDecimal bd = new BigDecimal(order.getOrderPrice().longValue());
+            cod.setOrderPrice(bd);
+            cod.setCreatedTime(order.getCreatedTime());
+            //将cod存入到cods集合中
+            cods.add(cod);
+        });
+        //遍历cods
+        //根据订单编号，去订单详情表中获取该订单的所欲商品的id及商品数量
+        //还要根据商品的id取商品表里获取商品名称和商品价格
+        cods.forEach( cod->{
+            //根据订单编号，去订单详情表中获取该订单的所有商品的id及商品数量
+            List<Orderinfo> orderinfos =  orderInfoService.getOrderInfosByOrderId(cod.getOrderId());
+            //封装OrderProductDTO
+            List<OrderProductDTO> opds = new ArrayList<>();
+            orderinfos.forEach(orderinfo ->{
+                //通过商品id封装OrderProductDTO
+                OrderProductDTO opd = getOrderProductDTO(orderinfo.getPpid());
+                //从orderinfo中获取商品数量存入到opd中
+                opd.setPcount(orderinfo.getPcount());
+                //opd封装完毕
+                //存入到集合中
+                opds.add(opd);
+            });
+
+            //将商品集合存入到CreateOrderDTO对象中
+            cod.setProducts(opds);
+//            getOrderProductDTO()
+
+        });
+        return cods;
+    }
+
+    @Override
+    public Integer deleteOrder(Long orderId) {
+        return orderMapper.delete(new QueryWrapper<tOrder>().eq("order_id",orderId));
     }
 
     @Override

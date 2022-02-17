@@ -59,10 +59,7 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
 
 
     public void addCart(Long userId, Long ppid, Long pcount) {
-        //1.获取所有的购物车信息
         List<Cart> carts = getAllCarts(userId);
-
-
         //2.更新购物车表
         boolean b = true;
         for (Cart cart : carts) {
@@ -76,7 +73,6 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
         //如果商品不存在。则添加新的记录
         if(b){
             Cart cart = new Cart();
-            //封装tcart
            int number = cartMapper.selectCount(null);
            long maxpid=0;
            if(number==0){
@@ -91,7 +87,6 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
             cart.setPcount(pcount);
             cart.setCartId(maxpid+1);
             cart.setPpid(ppid);
-            //存到数据库里
             cartMapper.insert(cart);
             ProductInfo productInfo = productInfoService.selectProductInfo(ppid);
             Log log = new Log();
@@ -100,7 +95,6 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
             log.setController("用户"+userId+"把"+productInfo.getPname()+"加入购物车");
             logMapper.insert(log);
         }
-
     }
 
     @Override

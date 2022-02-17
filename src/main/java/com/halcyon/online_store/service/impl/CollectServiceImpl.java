@@ -41,10 +41,9 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> impl
 
     @Override
     public int addCollect(Long userId, Long ppid) {
-        QueryWrapper<Collect> wrapper = new QueryWrapper<>();
-        wrapper.eq("user_id", userId);
-        wrapper.eq("ppid", ppid);
-        if (collectMapper.selectCount(wrapper) > 0) {
+        Collect collect1 = collectMapper.selectOne(new QueryWrapper<Collect>().
+                eq("user_id", userId).eq("ppid", ppid)) ;
+        if (collect1!=null) {
             return 0;
         } else {
             ProductInfo productInfo = productInfoService.selectProductInfo(ppid);
@@ -58,7 +57,7 @@ public class CollectServiceImpl extends ServiceImpl<CollectMapper, Collect> impl
                 maxpid=123456;
             }else {
                 QueryWrapper<Collect> wrapper1 = new QueryWrapper<>();
-                wrapper.select("max(cart_id) as maxid");
+                wrapper1.select("max(collect_id) as maxid");
                 Map<String, Object> map = this.getMap(wrapper1);
                 maxpid=(long)map.get("maxid")+1;
             }

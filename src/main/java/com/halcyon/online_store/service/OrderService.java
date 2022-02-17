@@ -36,6 +36,9 @@ List<CreateOrderDTO> getList1(Long userId);
 
     List<CreateOrderDTO> getList3();
 
+    List<CreateOrderDTO> getList4(Long userId);
+
+    Integer deleteOrder(Long orderId);
 
 
     // Integer apiUpdateOrder(tOrder tOrder);

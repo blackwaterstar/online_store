@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.halcyon.online_store.mapper.CartMapper">
 
-    <select id="selectCartVOByUserId" parameterType="java.lang.Long" resultType="com.halcyon.online_store.entity.vo.CartVO">
+   <select id="selectCartVOByUserId" parameterType="java.lang.Long" resultType="com.halcyon.online_store.entity.vo.CartVO">
     SELECT
       t1.cart_id,
       t1.user_id,

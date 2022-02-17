@@ -89,8 +89,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         List<Product> products = productMapper.selectList(null);
         List<AllProductDTO> list = new ArrayList<>();
         products.forEach(product -> {
-            List<ProductInfo> productInfos = productInfoMapper.selectList(new QueryWrapper<ProductInfo>().eq("pid",
-                    product.getPid()));
+            List<ProductInfo> productInfos = productInfoMapper.selectList(new QueryWrapper<ProductInfo>().
+                    eq("pid", product.getPid()));
             AllProductDTO productDTO = new AllProductDTO();
             productDTO.setPid(product.getPid());
             productDTO.setPname(product.getPname());
@@ -107,8 +107,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         List<Product> products = productMapper.selectList(new QueryWrapper<Product>().like("pname",pname));
         List<AllProductDTO> list = new ArrayList<>();
         products.forEach(product -> {
-            List<ProductInfo> productInfos = productInfoMapper.selectList(new QueryWrapper<ProductInfo>().eq("pid",
-                    product.getPid()));
+            List<ProductInfo> productInfos = productInfoMapper.selectList(new QueryWrapper<ProductInfo>().
+                    eq("pid", product.getPid()));
             AllProductDTO productDTO = new AllProductDTO();
             productDTO.setPid(product.getPid());
             productDTO.setPname(product.getPname());
