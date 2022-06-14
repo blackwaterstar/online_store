@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.halcyon.online_store.entity.Orderinfo;
 import com.halcyon.online_store.entity.ProductInfo;
+import com.halcyon.online_store.entity.dto.saleDTO;
 import com.halcyon.online_store.mapper.OrderinfoMapper;
 import com.halcyon.online_store.mapper.ProductInfoMapper;
 import com.halcyon.online_store.service.ProductInfoService;
@@ -65,6 +66,15 @@ public class ProductInfoServiceImpl extends ServiceImpl<ProductInfoMapper, Produ
     @Override
     public List<ProductInfo> selectListProductInfo(long pid) {
         return productInfoMapper.selectList(new QueryWrapper<ProductInfo>().eq("pid",pid));
+    }
+
+    @Override
+    public int allsalenum() {
+        QueryWrapper<ProductInfo> wrapper = new QueryWrapper<>();
+        wrapper.select("sum(allsalenumber) as salenumber");
+        Map<String,Object> map = this.getMap(wrapper);
+        BigDecimal allnum = (BigDecimal) map.get("salenumber");
+        return allnum.intValue();
     }
 
     @Override

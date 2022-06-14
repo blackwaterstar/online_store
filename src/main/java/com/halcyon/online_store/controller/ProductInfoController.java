@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author Halcyon
@@ -30,41 +30,44 @@ public class ProductInfoController {
     private OrderinfoService orderinfoService;
 
     @RequestMapping("listProductInfo")
-    public List<ProductInfo> listProductInfo(){
-//      获得当前用户的当前购物车信息（所有）
+    public List<ProductInfo> listProductInfo() {
+//获得当前用户的当前购物车信息（所有）
         return productInfoService.listProductInfo();
     }
 
     @RequestMapping("selectProductInfo")
-    public ProductInfo selectProductInfo(long ppid){
-//       获得当前用户的当前购物车信息（所有）
+    public ProductInfo selectProductInfo(long ppid) {
+//获得当前用户的当前购物车信息（所有）
         return productInfoService.selectProductInfo(ppid);
     }
 
     @RequestMapping("selectListProductInfo")
-    public List<ProductInfo> selectListProductInfo(long pid){
-//       获得当前用户的当前购物车信息（所有）
+    public List<ProductInfo> selectListProductInfo(long pid) {
+//获得当前用户的当前购物车信息（所有）
         return productInfoService.selectListProductInfo(pid);
     }
 
     @RequestMapping("addProductInfo")
-    public int addProductInfo(ProductInfo productInfo){
-//       获得当前用户的当前购物车信息（所有）
+    public int addProductInfo(ProductInfo productInfo) {
+//获得当前用户的当前购物车信息（所有）
         return productInfoService.addProductInfo(productInfo);
     }
+
     @RequestMapping("deleteProductInfo")
-    public int deleteProductInfo(long ppid){
-//       获得当前用户的当前购物车信息（所有）
+    public int deleteProductInfo(long ppid) {
+//获得当前用户的当前购物车信息（所有）
         return productInfoService.deleteProductInfo(ppid);
     }
+
     @RequestMapping("updateProductInfo")
-    public int updateProductInfo(ProductInfo productInfo){
-//       获得当前用户的当前购物车信息（所有）
+    public int updateProductInfo(ProductInfo productInfo) {
+    //获得当前用户的当前购物车信息（所有）
         return productInfoService.updateProductInfo(productInfo);
     }
 
+
     @RequestMapping("salesProduct")
-    public int salesProduct(Long pid){
+    public int salesProduct(Long pid) {
 
         return orderinfoService.salesProduct(pid);
     }

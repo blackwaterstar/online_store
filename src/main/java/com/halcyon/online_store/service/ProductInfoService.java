@@ -27,6 +27,7 @@ public interface ProductInfoService extends IService<ProductInfo> {
 
     List<ProductInfo> selectListProductInfo(long pid);
 
+    int allsalenum();
 
     List<ProductInfo> selectListbypids(List<Long> ppids);
 

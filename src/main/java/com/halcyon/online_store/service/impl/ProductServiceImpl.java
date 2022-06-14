@@ -103,7 +103,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     }
 
     @Override
-    public List<AllProductDTO> searchProduct1(String pname) {
+    public List<AllProductDTO> searchProductThenBuilt(String pname) {
         List<Product> products = productMapper.selectList(new QueryWrapper<Product>().like("pname",pname));
         List<AllProductDTO> list = new ArrayList<>();
         products.forEach(product -> {

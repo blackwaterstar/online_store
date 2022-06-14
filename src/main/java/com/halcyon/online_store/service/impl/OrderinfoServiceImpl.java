@@ -55,6 +55,15 @@ public class OrderinfoServiceImpl extends ServiceImpl<OrderinfoMapper, Orderinfo
     }
 
     @Override
+    public int allsalenum() {
+        QueryWrapper<Orderinfo> wrapper = new QueryWrapper<>();
+        wrapper.select("sum(pcount) as count");
+        Map<String,Object> map = this.getMap(wrapper);
+        BigDecimal pconut = (BigDecimal) map.get("count");
+        return pconut.intValue();
+    }
+
+    @Override
     public int salesProduct(Long pid) {
         QueryWrapper<Orderinfo> wrapper = new QueryWrapper<>();
         wrapper.select("sum(pcount) as count").eq("floor(ppid/100)",pid);

@@ -6,6 +6,7 @@ import com.halcyon.online_store.entity.Cart;
 import com.halcyon.online_store.entity.Log;
 import com.halcyon.online_store.entity.ProductInfo;
 import com.halcyon.online_store.entity.Type;
+import com.halcyon.online_store.entity.dto.saleDTO;
 import com.halcyon.online_store.entity.vo.CartVO;
 import com.halcyon.online_store.mapper.CartMapper;
 import com.halcyon.online_store.mapper.LogMapper;
@@ -56,6 +57,8 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements Ca
         return getCartVOList(userId);
 
     }
+
+
 
 
     public void addCart(Long userId, Long ppid, Long pcount) {

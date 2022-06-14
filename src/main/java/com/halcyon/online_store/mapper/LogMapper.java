@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2021-12-09
  */
 public interface LogMapper extends BaseMapper<Log> {
-
+    int getallmonthlog(int num);
 }

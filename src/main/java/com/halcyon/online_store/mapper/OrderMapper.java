@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface OrderMapper extends BaseMapper<tOrder> {
 
+    int getallmonthsalemoney(int num);
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -64,6 +65,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         comment.setLikes(a);
         return commentMapper.updateById(comment);
     }
+
+
 
     @Override
     public List<CommentDto> selectCommentById(Long ppid) {

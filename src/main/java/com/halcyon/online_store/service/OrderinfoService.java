@@ -28,5 +28,7 @@ public interface OrderinfoService extends IService<Orderinfo> {
 
     Orderinfo getOrderInfo(Long orderId);
 
+    int allsalenum();
+
 
 }

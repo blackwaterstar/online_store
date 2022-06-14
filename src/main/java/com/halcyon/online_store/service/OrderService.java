@@ -1,10 +1,8 @@
 package com.halcyon.online_store.service;
 
+import com.halcyon.online_store.entity.dto.*;
 import com.halcyon.online_store.entity.tOrder;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.halcyon.online_store.entity.dto.CreateOrderDTO;
-import com.halcyon.online_store.entity.dto.OrderDTO;
-import com.halcyon.online_store.entity.dto.ResultDTO;
 import com.halcyon.online_store.entity.vo.OrderVO;
 
 import java.util.List;
@@ -39,6 +37,10 @@ List<CreateOrderDTO> getList1(Long userId);
     List<CreateOrderDTO> getList4(Long userId);
 
     Integer deleteOrder(Long orderId);
+
+    saleDTO SaleData();
+
+    saleInfoDTO saleDataInfo();
 
 
     // Integer apiUpdateOrder(tOrder tOrder);

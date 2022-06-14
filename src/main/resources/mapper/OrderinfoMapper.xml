@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.halcyon.online_store.mapper.OrderinfoMapper">
+    <select id="getallmonthsalenum" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select coalesce(sum(pcount),0)  from orderinfo where order_id in (SELECT order_id FROM t_order WHERE PERIOD_DIFF( date_format( now( ) ,
+    '%Y%m' ) , date_format( created_time, '%Y%m' ) ) = #{num});
+  </select>
 
 </mapper>

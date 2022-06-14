@@ -1,10 +1,8 @@
 package com.halcyon.online_store.controller;
 
 
+import com.halcyon.online_store.entity.dto.*;
 import com.halcyon.online_store.entity.tOrder;
-import com.halcyon.online_store.entity.dto.CreateOrderDTO;
-import com.halcyon.online_store.entity.dto.OrderDTO;
-import com.halcyon.online_store.entity.dto.ResultDTO;
 import com.halcyon.online_store.service.OrderService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,6 +41,17 @@ public class OrderController {
     public List<CreateOrderDTO> getList(Long userId){
         return orderService.getList(userId);
     }
+
+    @RequestMapping("saleData")
+    public saleDTO saleData(){
+        return orderService.SaleData();
+    }
+
+    @RequestMapping("saleDataInfo")
+    public saleInfoDTO saleDataInfo(){
+        return orderService.saleDataInfo();
+    }
+
 
     /**
      * 获取用户已付款订单

@@ -4,15 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.halcyon.online_store.entity.*;
-import com.halcyon.online_store.entity.dto.CreateOrderDTO;
-import com.halcyon.online_store.entity.dto.OrderDTO;
-import com.halcyon.online_store.entity.dto.OrderProductDTO;
-import com.halcyon.online_store.entity.dto.ResultDTO;
+import com.halcyon.online_store.entity.dto.*;
 import com.halcyon.online_store.entity.vo.OrderVO;
-import com.halcyon.online_store.mapper.CartMapper;
-import com.halcyon.online_store.mapper.OrderMapper;
-import com.halcyon.online_store.mapper.OrderinfoMapper;
-import com.halcyon.online_store.mapper.ProductInfoMapper;
+import com.halcyon.online_store.mapper.*;
 import com.halcyon.online_store.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
@@ -56,6 +50,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
 
     @Resource
     private ProductInfoMapper productInfoMapper;
+
+    @Resource
+    private  CommentMapper commentMapper;
+
+    @Resource
+    private LogMapper logMapper;
 
 
     /**
@@ -174,7 +174,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
 
     public List<CreateOrderDTO> getList1(Long userId) {
         QueryWrapper<tOrder> wrapper = new QueryWrapper<>();
-        wrapper.eq(" user_id",userId).eq("paystatue","已付款");
+        wrapper.eq(" user_id",userId).eq("paystatue","已付款").orderByDesc("updated_time");
         List<tOrder> tOrders = orderMapper.selectList(wrapper);
         List<CreateOrderDTO> cods = new ArrayList<CreateOrderDTO>();
 
@@ -235,7 +235,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
 
     public List<CreateOrderDTO> getList2(Long userId) {
         QueryWrapper<tOrder> wrapper = new QueryWrapper<>();
-        wrapper.eq(" user_id",userId).eq("paystatue","未付款");
+        wrapper.eq(" user_id",userId).eq("paystatue","未付款").orderByDesc("updated_time");
         List<tOrder> tOrders = orderMapper.selectList(wrapper);
         List<CreateOrderDTO> cods = new ArrayList<CreateOrderDTO>();
 
@@ -284,7 +284,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
     @Override
     public List<CreateOrderDTO> getList3() {
         QueryWrapper<tOrder> wrapper = new QueryWrapper<>();
-        wrapper.eq("paystatue","已付款");
+        wrapper.eq("paystatue","已付款").orderByDesc("updated_time");
         List<tOrder> tOrders = orderMapper.selectList(wrapper);
         List<CreateOrderDTO> cods = new ArrayList<CreateOrderDTO>();
         tOrders.forEach(order -> {
@@ -331,9 +331,9 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
     public List<CreateOrderDTO> getList4(Long userId) {
         QueryWrapper<tOrder> wrapper = new QueryWrapper<>();
         if (userId==null||userId.equals("")) {
-            wrapper.eq("paystatue","已付款");
+            wrapper.eq("paystatue","已付款").orderByDesc("updated_time");
         }else {
-            wrapper.like(" user_id",userId).eq("paystatue","已付款");
+            wrapper.like(" user_id",userId).eq("paystatue","已付款").orderByDesc("updated_time");
         }
         List<tOrder> tOrders = orderMapper.selectList(wrapper);
         List<CreateOrderDTO> cods = new ArrayList<CreateOrderDTO>();
@@ -348,6 +348,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
             BigDecimal bd = new BigDecimal(order.getOrderPrice().longValue());
             cod.setOrderPrice(bd);
             cod.setCreatedTime(order.getCreatedTime());
+            cod.setUpdatedTime(order.getUpdatedTime());
             //将cod存入到cods集合中
             cods.add(cod);
         });
@@ -380,6 +381,43 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, tOrder> implement
     @Override
     public Integer deleteOrder(Long orderId) {
         return orderMapper.delete(new QueryWrapper<tOrder>().eq("order_id",orderId));
+    }
+
+    @Override
+    public saleDTO SaleData() {
+        saleDTO saleDTO = new saleDTO();
+        saleDTO.setShoppings(orderInfoService.allsalenum());
+        saleDTO.setMessages(commentMapper.selectCount(null));
+        saleDTO.setNewVisitis(logMapper.selectCount(new QueryWrapper<Log>().eq("state",1)));
+        QueryWrapper<tOrder> wrapper = new QueryWrapper<>();
+        wrapper.select("sum(order_price) as allorderprice");
+        Map<String,Object> map = getMap(wrapper);
+        BigDecimal allorderprice = (BigDecimal)map.get("allorderprice");
+        saleDTO.setPurchases(allorderprice.intValue());
+        return saleDTO;
+    }
+
+    @Override
+    public saleInfoDTO saleDataInfo() {
+        saleInfoDTO saleInfoDTO = new saleInfoDTO();
+        ArrayList<Integer> newVisitis = new ArrayList<>();
+        ArrayList<Integer> messages = new ArrayList<>();
+        ArrayList<Integer> purchases = new ArrayList<>();
+        ArrayList<Integer> shoppings = new ArrayList<>();
+        for (int i = 5; i >= 0; i--) {
+            newVisitis.add(logMapper.getallmonthlog(i));
+        }for (int i = 5; i >= 0; i--) {
+            messages.add(commentMapper.getallmonthcomment(i));
+        }for (int i = 5; i >= 0; i--) {
+            purchases.add(orderMapper.getallmonthsalemoney(i));
+        }for (int i = 5; i >= 0; i--) {
+            shoppings.add(orderinfoMapper.getallmonthsalenum(i));
+        }
+        saleInfoDTO.setNewVisitis(newVisitis);
+        saleInfoDTO.setMessages(messages);
+        saleInfoDTO.setPurchases(purchases);
+        saleInfoDTO.setShoppings(shoppings);
+        return saleInfoDTO;
     }
 
     @Override

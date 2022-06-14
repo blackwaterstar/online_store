@@ -29,6 +29,7 @@ public class CreateOrderDTO {
     private String orderTel;
     private String orderAddr;
     private List<OrderProductDTO> products;
+    private String updatedTime;
 
 
 }

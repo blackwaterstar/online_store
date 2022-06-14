@@ -13,4 +13,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface OrderinfoMapper extends BaseMapper<Orderinfo> {
 
+    int getallmonthsalenum(int num);
+
 }
